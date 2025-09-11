@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+@import "tailwindcss";
+
+@theme inline {
+  --color-primary: #2563eb;
+  --color-primary-dull: #1f58d8;
+  --color-light: #f1f5f9;
+}
+
+@layer base {
+  body {
+    font-family: "Outfit", sans-serif;
+  }
+}
+
+.mobile-link.active {
+  @apply text-primary;
+}
+
+.nav-link.active {
+  position: relative;
+}
+
+.nav-link::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--color-primary);
+  transition: all 0.3s;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+}
+.nav-link {
+  position: relative;
+}
+.nav-link:hover::before {
+  width: 100%;
+}
+
+.nav-link.active::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--color-primary);
+}
+
