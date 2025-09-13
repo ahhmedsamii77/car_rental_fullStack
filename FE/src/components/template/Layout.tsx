@@ -6,7 +6,7 @@ export default function Layout() {
   const location = useLocation();
   const isDashboard = location.pathname.split("/").includes("dashboard");
   return (
-    <div className="w-full">
+    <div className="w-full overflow-hidden">
       {!isDashboard && <Navbar />}
       <main>
         <Outlet />
