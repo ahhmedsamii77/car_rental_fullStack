@@ -4,19 +4,7 @@ import Signup from "./Signup"
 import ConfirmEmail from "./ConfirmEmail"
 import { motion, AnimatePresence } from "motion/react"
 import { FaCar } from "react-icons/fa6"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog"
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from "@/components/ui/tabs"
+import { IoCloseOutline } from "react-icons/io5"
 import { authContext } from "../context/authContext"
 
 type Tab = "signin" | "signup"
@@ -35,112 +23,139 @@ export default function Modal({
     if (accessToken) setShowModal(false)
   }, [accessToken])
 
+  // Prevent body scroll when open
+  useEffect(() => {
+    document.body.style.overflow = "hidden"
+    return () => { document.body.style.overflow = "" }
+  }, [])
+
   return (
-    <Dialog open onOpenChange={(o) => !o && setShowModal(false)}>
-      <DialogContent
-        className="sm:max-w-md p-0 overflow-hidden rounded-2xl border-0 shadow-2xl"
-        showCloseButton={false}
+    <AnimatePresence>
+      {/* Backdrop */}
+      <motion.div
+        key="modal-backdrop"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        onClick={() => setShowModal(false)}
+        className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
       >
-        {/* ── Gradient header ── */}
-        <div className="bg-gradient-to-br from-[#7C3AED] via-[#6366F1] to-[#06B6D4] px-6 pt-7 pb-6 text-white relative">
-          <button
-            onClick={() => setShowModal(false)}
-            className="absolute top-4 right-4 w-8 h-8 rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all cursor-pointer text-white font-medium text-base leading-none"
-            aria-label="Close"
-          >
-            ✕
-          </button>
+        {/* Panel */}
+        <motion.div
+          key="modal-panel"
+          initial={{ scale: 0.92, opacity: 0, y: 20 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.92, opacity: 0, y: 20 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          onClick={(e) => e.stopPropagation()}
+          className="w-full max-w-md rounded-2xl overflow-hidden shadow-2xl bg-background max-h-[90vh] overflow-y-auto"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Authentication"
+        >
+          {/* ── Gradient header ── */}
+          <div className="bg-gradient-to-br from-[#7C3AED] via-[#6366F1] to-[#06B6D4] px-6 pt-7 pb-6 text-white relative">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 w-9 h-9 rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all cursor-pointer text-white"
+              aria-label="Close"
+            >
+              <IoCloseOutline className="w-5 h-5" />
+            </button>
 
-          <div className="flex items-center gap-2.5 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-              <FaCar className="w-5 h-5 text-white" />
+            {/* Brand */}
+            <div className="flex items-center gap-2.5 mb-5">
+              <div className="w-10 h-10 rounded-xl bg-white/25 flex items-center justify-center">
+                <FaCar className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-bold text-xl" style={{ fontFamily: "var(--font-display)" }}>
+                DriveEase
+              </span>
             </div>
-            <span className="font-bold text-xl font-[family-name:var(--font-display)]">DriveEase</span>
-          </div>
 
-          <DialogHeader>
-            <DialogTitle className="text-white text-2xl font-[family-name:var(--font-display)]">
+            {/* Title */}
+            <h2 className="text-2xl font-bold text-white leading-tight" style={{ fontFamily: "var(--font-display)" }}>
               {showConfirmEmail
                 ? "Verify Your Email"
                 : activeTab === "signin"
                 ? "Welcome Back 👋"
                 : "Create Account"}
-            </DialogTitle>
-            <DialogDescription className="text-white/75 text-sm mt-1">
+            </h2>
+            <p className="text-white/70 text-sm mt-1.5">
               {showConfirmEmail
                 ? "Enter the 4-digit code sent to your inbox."
                 : activeTab === "signin"
                 ? "Sign in to continue your DriveEase journey"
                 : "Join thousands of happy renters today"}
-            </DialogDescription>
-          </DialogHeader>
-        </div>
+            </p>
+          </div>
 
-        {/* ── Body ── */}
-        <div className="px-6 pb-7 pt-5 bg-background">
-          <AnimatePresence mode="wait">
-            {showConfirmEmail ? (
-              <motion.div
-                key="confirm"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.2 }}
-              >
-                <ConfirmEmail
-                  setShowConfirmEmail={setShowConfirmEmail}
-                  setShowLogin={(v) => setActiveTab(v ? "signin" : "signup")}
-                />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="auth-tabs"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Tabs
-                  value={activeTab}
-                  onValueChange={(v) => v && setActiveTab(v as Tab)}
-                  className="w-full"
-                >
-                  {/* Tab switcher */}
-                  <TabsList className="w-full mb-5 h-11 rounded-xl bg-muted p-1">
-                    <TabsTrigger
-                      value="signin"
-                      className="flex-1 h-full rounded-lg text-sm font-semibold cursor-pointer transition-all
-                        text-muted-foreground hover:text-foreground
-                        data-active:bg-white data-active:text-[#7C3AED] data-active:shadow-sm"
-                    >
-                      Sign In
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="signup"
-                      className="flex-1 h-full rounded-lg text-sm font-semibold cursor-pointer transition-all
-                        text-muted-foreground hover:text-foreground
-                        data-active:bg-white data-active:text-[#7C3AED] data-active:shadow-sm"
-                    >
-                      Sign Up
-                    </TabsTrigger>
-                  </TabsList>
+          {/* ── Body ── */}
+          <div className="px-6 pb-7 pt-5 bg-background">
 
-                  <TabsContent value="signin">
-                    <Signin setShowLogin={(v) => setActiveTab(v ? "signin" : "signup")} />
-                  </TabsContent>
-
-                  <TabsContent value="signup">
-                    <Signup
-                      setShowLogin={(v) => setActiveTab(v ? "signin" : "signup")}
-                      setShowConfirmEmail={setShowConfirmEmail}
-                    />
-                  </TabsContent>
-                </Tabs>
-              </motion.div>
+            {/* Tab switcher — only when not on confirm email */}
+            {!showConfirmEmail && (
+              <div className="flex rounded-xl bg-muted p-1 mb-5">
+                {(["signin", "signup"] as Tab[]).map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all cursor-pointer ${
+                      activeTab === tab
+                        ? "bg-white text-[#7C3AED] shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {tab === "signin" ? "Sign In" : "Sign Up"}
+                  </button>
+                ))}
+              </div>
             )}
-          </AnimatePresence>
-        </div>
-      </DialogContent>
-    </Dialog>
+
+            {/* Animated form */}
+            <AnimatePresence mode="wait">
+              {showConfirmEmail ? (
+                <motion.div
+                  key="confirm"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <ConfirmEmail
+                    setShowConfirmEmail={setShowConfirmEmail}
+                    setShowLogin={(v) => setActiveTab(v ? "signin" : "signup")}
+                  />
+                </motion.div>
+              ) : activeTab === "signin" ? (
+                <motion.div
+                  key="signin"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <Signin setShowLogin={(v) => setActiveTab(v ? "signin" : "signup")} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="signup"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <Signup
+                    setShowLogin={(v) => setActiveTab(v ? "signin" : "signup")}
+                    setShowConfirmEmail={setShowConfirmEmail}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   )
 }
