@@ -21,7 +21,8 @@ const statCards = [
 export default function Dashboard() {
   const { data, isLoading } = useGetDashboardData()
   if (isLoading) return <Loader />
-  const dashboardData: DashboardType = data?.data.dashboardData
+  const dashboardData: DashboardType | undefined = data?.data.dashboardData
+  if (!dashboardData) return <Loader />
 
   return (
     <section className="mb-10 max-w-5xl">
@@ -43,7 +44,7 @@ export default function Dashboard() {
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">{label}</p>
-                  <span className="font-bold text-2xl">{getValue(dashboardData)}</span>
+                  <span className="font-bold text-2xl">{dashboardData ? getValue(dashboardData) : "—"}</span>
                 </div>
                 <div className={`${bg} ${color} p-3 rounded-2xl`}>
                   <Icon className="w-6 h-6" />
@@ -98,7 +99,7 @@ export default function Dashboard() {
                   <MdAttachMoney className="w-6 h-6 text-[#7C3AED]" />
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-[#7C3AED]">${dashboardData.monthlyEarnings}</p>
+                  <p className="text-3xl font-bold text-[#7C3AED]">${dashboardData?.monthlyEarnings ?? 0}</p>
                   <p className="text-xs text-muted-foreground">From confirmed bookings</p>
                 </div>
               </div>
@@ -106,7 +107,7 @@ export default function Dashboard() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Total Cars</span>
-                  <span className="font-semibold">{dashboardData.cars.length}</span>
+                  <span className="font-semibold">{dashboardData?.cars?.length ?? 0}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">All Bookings</span>
