@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useChangeBookingStatus } from "../lib/queries"
 import type { BookingResType } from "../types"
-import { TableCell, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import {
   Select,
@@ -35,11 +34,11 @@ export default function ManageBookingsData({ booking }: { booking: BookingResTyp
       : "bg-amber-100 text-amber-700 hover:bg-amber-100"
 
   return (
-    <TableRow className="hover:bg-muted/40 transition-colors">
+    <tr className="border-b border-border last:border-0 hover:bg-[#7C3AED]/5 transition-colors">
       {/* Car */}
-      <TableCell className="py-3">
+      <td className="px-4 py-3">
         <div className="flex items-center gap-3">
-          <Avatar className="w-12 h-12 rounded-lg">
+          <Avatar className="w-12 h-12 rounded-lg shrink-0">
             <AvatarImage src={booking.carId.image.secure_url} className="object-cover" />
             <AvatarFallback className="rounded-lg bg-[#7C3AED]/10 text-[#7C3AED] text-xs">
               {booking.carId.brand?.[0]}
@@ -50,23 +49,23 @@ export default function ManageBookingsData({ booking }: { booking: BookingResTyp
             <p className="text-xs text-muted-foreground">{booking.carId.seating_capacity} seats • {booking.carId.transmission}</p>
           </div>
         </div>
-      </TableCell>
+      </td>
 
-      {/* Date range */}
-      <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
+      {/* Dates */}
+      <td className="px-4 py-3 hidden md:table-cell text-sm text-muted-foreground">
         {new Date(booking.pickupDate).toLocaleDateString()} → {new Date(booking.returnDate).toLocaleDateString()}
-      </TableCell>
+      </td>
 
       {/* Price */}
-      <TableCell className="font-semibold text-[#7C3AED]">${booking.price}</TableCell>
+      <td className="px-4 py-3 font-semibold text-[#7C3AED]">${booking.price}</td>
 
       {/* Payment */}
-      <TableCell className="hidden md:table-cell">
+      <td className="px-4 py-3 hidden md:table-cell">
         <Badge variant="outline" className="text-xs">Offline</Badge>
-      </TableCell>
+      </td>
 
-      {/* Status / Actions */}
-      <TableCell>
+      {/* Status */}
+      <td className="px-4 py-3">
         {status === "pending" ? (
           <Select value={status} onValueChange={(val) => { if (val) handleChangeStatus(val) }}>
             <SelectTrigger className="w-32 h-8 rounded-xl text-xs border-border/60 focus:ring-[#7C3AED]">
@@ -81,7 +80,7 @@ export default function ManageBookingsData({ booking }: { booking: BookingResTyp
         ) : (
           <Badge className={`text-xs capitalize font-semibold ${statusColor}`}>{status}</Badge>
         )}
-      </TableCell>
-    </TableRow>
+      </td>
+    </tr>
   )
 }

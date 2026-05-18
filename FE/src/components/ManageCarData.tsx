@@ -2,7 +2,6 @@ import { useState } from "react"
 import type { CarResType } from "../types"
 import { useDeleteCar } from "../lib/queries"
 import toast from "react-hot-toast"
-import { TableCell, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -36,11 +35,11 @@ export default function ManageCarData({ car }: { car: CarResType }) {
   }
 
   return (
-    <TableRow className="hover:bg-muted/40 transition-colors">
+    <tr className="border-b border-border last:border-0 hover:bg-[#7C3AED]/5 transition-colors">
       {/* Car */}
-      <TableCell className="py-3">
+      <td className="px-4 py-3">
         <div className="flex items-center gap-3">
-          <Avatar className="w-12 h-12 rounded-lg">
+          <Avatar className="w-12 h-12 rounded-lg shrink-0">
             <AvatarImage src={car.image.secure_url} className="object-cover" />
             <AvatarFallback className="rounded-lg bg-[#7C3AED]/10 text-[#7C3AED] text-xs">
               {car.brand?.[0]}
@@ -51,16 +50,18 @@ export default function ManageCarData({ car }: { car: CarResType }) {
             <p className="text-xs text-muted-foreground">{car.seating_capacity} seats • {car.transmission}</p>
           </div>
         </div>
-      </TableCell>
+      </td>
 
       {/* Category */}
-      <TableCell className="hidden md:table-cell text-sm text-muted-foreground capitalize">{car.category}</TableCell>
+      <td className="px-4 py-3 hidden md:table-cell text-sm text-muted-foreground capitalize">{car.category}</td>
 
       {/* Price */}
-      <TableCell className="font-semibold text-[#7C3AED]">${car.price}<span className="text-muted-foreground font-normal text-xs">/day</span></TableCell>
+      <td className="px-4 py-3 font-semibold text-[#7C3AED]">
+        ${car.price}<span className="text-muted-foreground font-normal text-xs">/day</span>
+      </td>
 
       {/* Status */}
-      <TableCell className="hidden md:table-cell">
+      <td className="px-4 py-3 hidden md:table-cell">
         <Badge
           className={`text-xs font-semibold ${
             car.isAvailable
@@ -70,10 +71,10 @@ export default function ManageCarData({ car }: { car: CarResType }) {
         >
           {car.isAvailable ? "Available" : "Unavailable"}
         </Badge>
-      </TableCell>
+      </td>
 
       {/* Actions */}
-      <TableCell>
+      <td className="px-4 py-3 text-right">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger
             render={
@@ -104,7 +105,7 @@ export default function ManageCarData({ car }: { car: CarResType }) {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </TableCell>
-    </TableRow>
+      </td>
+    </tr>
   )
 }

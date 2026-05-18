@@ -4,13 +4,6 @@ import Loader from "../components/shared/Loader"
 import type { CarResType } from "../types"
 import ManageCarData from "../components/ManageCarData"
 import { motion } from "motion/react"
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { Card, CardContent } from "@/components/ui/card"
 
 export default function ManageCars() {
@@ -30,28 +23,28 @@ export default function ManageCars() {
       >
         <Card className="border-border/60 shadow-sm overflow-hidden">
           <CardContent className="p-0 overflow-x-auto">
-            <Table>
-              <TableHeader className="bg-muted border-b-2 border-[#7C3AED]/30">
-                <TableRow className="hover:bg-transparent">
-                  <TableHead className="font-semibold text-foreground h-12 pl-4">Vehicle</TableHead>
-                  <TableHead className="font-semibold text-foreground h-12 hidden md:table-cell">Category</TableHead>
-                  <TableHead className="font-semibold text-foreground h-12">Price / Day</TableHead>
-                  <TableHead className="font-semibold text-foreground h-12 hidden md:table-cell">Status</TableHead>
-                  <TableHead className="font-semibold text-foreground h-12 pr-4 text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-muted border-b border-border">
+                  <th className="text-left font-semibold text-foreground px-4 py-3">Vehicle</th>
+                  <th className="text-left font-semibold text-foreground px-4 py-3 hidden md:table-cell">Category</th>
+                  <th className="text-left font-semibold text-foreground px-4 py-3">Price / Day</th>
+                  <th className="text-left font-semibold text-foreground px-4 py-3 hidden md:table-cell">Status</th>
+                  <th className="text-right font-semibold text-foreground px-4 py-3">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
                 {cars.length === 0 ? (
-                  <TableRow>
-                    <td colSpan={5} className="text-center py-16 text-muted-foreground text-sm">
+                  <tr>
+                    <td colSpan={5} className="text-center py-16 text-muted-foreground">
                       No cars listed yet. Go to <strong>Add Car</strong> to get started.
                     </td>
-                  </TableRow>
+                  </tr>
                 ) : (
                   cars.map((car) => <ManageCarData key={car._id} car={car} />)
                 )}
-              </TableBody>
-            </Table>
+              </tbody>
+            </table>
           </CardContent>
         </Card>
       </motion.div>

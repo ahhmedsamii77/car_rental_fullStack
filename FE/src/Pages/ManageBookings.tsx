@@ -4,13 +4,6 @@ import Loader from "../components/shared/Loader"
 import type { BookingResType } from "../types"
 import ManageBookingsData from "../components/ManageBookingsData"
 import { motion } from "motion/react"
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { Card, CardContent } from "@/components/ui/card"
 
 export default function ManageBookings() {
@@ -30,30 +23,30 @@ export default function ManageBookings() {
       >
         <Card className="border-border/60 shadow-sm overflow-hidden">
           <CardContent className="p-0 overflow-x-auto">
-            <Table>
-              <TableHeader className="bg-muted border-b-2 border-[#7C3AED]/30">
-                <TableRow className="hover:bg-transparent">
-                  <TableHead className="font-semibold text-foreground h-12 pl-4">Vehicle</TableHead>
-                  <TableHead className="font-semibold text-foreground h-12 hidden md:table-cell">Dates</TableHead>
-                  <TableHead className="font-semibold text-foreground h-12">Price</TableHead>
-                  <TableHead className="font-semibold text-foreground h-12 hidden md:table-cell">Payment</TableHead>
-                  <TableHead className="font-semibold text-foreground h-12 pr-4">Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-muted border-b border-border">
+                  <th className="text-left font-semibold text-foreground px-4 py-3">Vehicle</th>
+                  <th className="text-left font-semibold text-foreground px-4 py-3 hidden md:table-cell">Dates</th>
+                  <th className="text-left font-semibold text-foreground px-4 py-3">Price</th>
+                  <th className="text-left font-semibold text-foreground px-4 py-3 hidden md:table-cell">Payment</th>
+                  <th className="text-left font-semibold text-foreground px-4 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody>
                 {bookings.length === 0 ? (
-                  <TableRow>
-                    <td colSpan={5} className="text-center py-16 text-muted-foreground text-sm">
+                  <tr>
+                    <td colSpan={5} className="text-center py-16 text-muted-foreground">
                       No bookings yet.
                     </td>
-                  </TableRow>
+                  </tr>
                 ) : (
                   bookings.map((booking) => (
                     <ManageBookingsData key={booking._id} booking={booking} />
                   ))
                 )}
-              </TableBody>
-            </Table>
+              </tbody>
+            </table>
           </CardContent>
         </Card>
       </motion.div>
