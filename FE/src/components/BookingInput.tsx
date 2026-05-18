@@ -57,10 +57,10 @@ export default function BookingInput() {
               <SelectValue placeholder="Select city" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="New York">New York</SelectItem>
-              <SelectItem value="Los Angeles">Los Angeles</SelectItem>
-              <SelectItem value="Houston">Houston</SelectItem>
-              <SelectItem value="Chicago">Chicago</SelectItem>
+              <SelectItem value="new york">New York</SelectItem>
+              <SelectItem value="los angeles">Los Angeles</SelectItem>
+              <SelectItem value="houston">Houston</SelectItem>
+              <SelectItem value="chicago">Chicago</SelectItem>
             </SelectContent>
           </Select>
         </div>
