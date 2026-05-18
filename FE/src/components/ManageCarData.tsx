@@ -35,6 +35,7 @@ export default function ManageCarData({ car }: { car: CarResType }) {
   }
 
   return (
+    <>
     <tr className="group border-b border-border last:border-0 transition-colors">
       {/* Car */}
       <td className="px-4 py-3 group-hover:bg-[#7C3AED]/5 transition-colors">
@@ -81,11 +82,11 @@ export default function ManageCarData({ car }: { car: CarResType }) {
               <button
                 className="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-red-50 hover:text-red-500 cursor-pointer transition-colors"
                 aria-label="Delete car"
-              />
+              >
+                <FiTrash2 className="w-4 h-4" />
+              </button>
             }
-          >
-            <FiTrash2 className="w-4 h-4" />
-          </DialogTrigger>
+          />
           <DialogContent className="rounded-2xl max-w-sm">
             <DialogHeader>
               <DialogTitle>Delete Car</DialogTitle>
@@ -107,5 +108,6 @@ export default function ManageCarData({ car }: { car: CarResType }) {
         </Dialog>
       </td>
     </tr>
+    </>
   )
 }
