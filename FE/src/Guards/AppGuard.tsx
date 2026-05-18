@@ -14,14 +14,15 @@ export default function AppGuard({ children }: { children: JSX.Element }) {
 
   const isAuth = !!(accessToken || refershToken);
 
-  // Not logged in → send to home (login modal lives there)
+  // Not logged in → send to home
   if (!isAuth) return <Navigate replace to="/" />;
 
-  // Check admin access for dashboard routes
-  const { data: userInfo } = useGetUserInfo();
-  const role = userInfo?.data?.data?.role ?? localStorage.getItem("role");
+  // Fetch role from API only — no localStorage fallback
+  const { data: userInfo, isLoading } = useGetUserInfo();
+  const role = userInfo?.data?.data?.role;
 
-  if (pathname.startsWith("/dashboard") && role !== null && role !== "admin") {
+  // While the API call is in-flight, don't redirect (avoids false block on refresh)
+  if (pathname.startsWith("/dashboard") && !isLoading && role !== "admin") {
     return <Navigate replace to="/" />;
   }
 
