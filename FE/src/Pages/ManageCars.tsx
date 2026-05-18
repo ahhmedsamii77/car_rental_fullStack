@@ -26,11 +26,11 @@ export default function ManageCars() {
             <table className="w-full text-sm">
               <thead>
                 <tr className=" border-b border-border">
-                  <th className="text-left font-semibold text-foreground px-4 py-1.5">Vehicle</th>
-                  <th className="text-left font-semibold text-foreground px-4 py-1.5 hidden md:table-cell">Category</th>
-                  <th className="text-left font-semibold text-foreground px-4 py-1.5">Price / Day</th>
-                  <th className="text-left font-semibold text-foreground px-4 py-1.5 hidden md:table-cell">Status</th>
-                  <th className="text-right font-semibold text-foreground px-4 py-1.5">Actions</th>
+                  <th className="text-left font-semibold text-foreground px-4 ">Vehicle</th>
+                  <th className="text-left font-semibold text-foreground px-4  hidden md:table-cell">Category</th>
+                  <th className="text-left font-semibold text-foreground px-4 ">Price / Day</th>
+                  <th className="text-left font-semibold text-foreground px-4  hidden md:table-cell">Status</th>
+                  <th className="text-right font-semibold text-foreground px-4 ">Actions</th>
                 </tr>
               </thead>
               <tbody>

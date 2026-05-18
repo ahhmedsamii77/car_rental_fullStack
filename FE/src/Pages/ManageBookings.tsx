@@ -26,11 +26,11 @@ export default function ManageBookings() {
             <table className="w-full text-sm">
               <thead>
                 <tr className=" border-b border-border">
-                  <th className="text-left font-semibold text-foreground px-4 py-1.5">Vehicle</th>
-                  <th className="text-left font-semibold text-foreground px-4 py-1.5 hidden md:table-cell">Dates</th>
-                  <th className="text-left font-semibold text-foreground px-4 py-1.5">Price</th>
-                  <th className="text-left font-semibold text-foreground px-4 py-3 hidden md:table-cell">Payment</th>
-                  <th className="text-left font-semibold text-foreground px-4 py-1.5">Status</th>
+                  <th className="text-left font-semibold text-foreground px-4 ">Vehicle</th>
+                  <th className="text-left font-semibold text-foreground px-4  hidden md:table-cell">Dates</th>
+                  <th className="text-left font-semibold text-foreground px-4 ">Price</th>
+                  <th className="text-left font-semibold text-foreground px-4  hidden md:table-cell">Payment</th>
+                  <th className="text-left font-semibold text-foreground px-4 ">Status</th>
                 </tr>
               </thead>
               <tbody>
