@@ -7,7 +7,7 @@ import { FiLogOut, FiLogIn } from "react-icons/fi"
 import { FaCar } from "react-icons/fa6"
 import Modal from "../Modal"
 import { authContext } from "../../context/authContext"
-import { useLogout } from "../../lib/queries"
+import { useGetUserInfo, useLogout } from "../../lib/queries"
 import toast from "react-hot-toast"
 import { motion, AnimatePresence } from "motion/react"
 import { Button } from "@/components/ui/button"
@@ -25,9 +25,10 @@ export default function Navbar() {
   const [showModal, setShowModal] = useState(false)
   const { accessToken, setAccessToken, query, setQuery } = useContext(authContext)!
   const { mutateAsync: logout } = useLogout()
+  const { data: userInfo } = useGetUserInfo()
   const navigate = useNavigate()
 
-  const isAdmin = localStorage.getItem("role") === "admin"
+  const isAdmin = userInfo?.data?.data?.role === "admin"
 
   async function handleLogout() {
     try {

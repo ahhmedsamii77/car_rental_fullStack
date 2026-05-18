@@ -17,7 +17,6 @@ import cloudinary from "../../utils/cloudinary/index.js";
 export async function register(req, res, next) {
   const { name, email, password } = req.body;
   const isUserExist = await userModel.findOne({ email });
-  console.log(isUserExist);
   if (isUserExist) {
     throw new Error("user already exist", { cause: 400 });
   }

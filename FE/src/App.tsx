@@ -6,7 +6,8 @@ import AdminLayout from "./components/template/AdminLayout";
 import AddCar from "./Pages/AddCar";
 import ManageCars from "./Pages/ManageCars";
 import ManageBookings from "./Pages/ManageBookings";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { QueryClientProvider } from "@tanstack/react-query"
+import { queryClient } from "./lib/queryClient"
 import { Toaster } from "react-hot-toast";
 import AuthContextProvider from "./context/authContext";
 import NotFound from "./Pages/NotFound";
@@ -42,12 +43,12 @@ const router = createBrowserRouter([
   }
 ]);
 
-const client = new QueryClient();
+
 
 export default function App() {
   return (
     <>
-      <QueryClientProvider client={client}>
+      <QueryClientProvider client={queryClient}>
         <AuthContextProvider>
           <RouterProvider router={router} />
         </AuthContextProvider>

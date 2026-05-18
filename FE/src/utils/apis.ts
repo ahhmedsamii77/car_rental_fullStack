@@ -1,4 +1,15 @@
 import axios from "axios";
+import { queryClient } from "../lib/queryClient";
+
+/** Read role from React Query cache; fall back to localStorage */
+function getRole(): string {
+  const cached = queryClient.getQueryData<{ data: { data: { role: string } } }>(["userInfo"]);
+  return cached?.data?.data?.role ?? localStorage.getItem("role") ?? "user";
+}
+
+function getPrefix(): string {
+  return getRole() === "user" ? "Bearer" : "Admin";
+}
 import type {
   AvailableCarType,
   BookingType,
@@ -36,7 +47,7 @@ export function confirmEmail({ email, otp }: ConfirmEmailType) {
 export function logout() {
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = localStorage.getItem("access_token");
-  const prefix = localStorage.getItem("role") == "user" ? "Bearer" : "Admin";
+  const prefix = getPrefix();
   return axios.patch(
     `${baseUrl}/users/revokeToken`,
     {},
@@ -97,7 +108,7 @@ export function getDashboardData() {
 export function refershToken() {
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = localStorage.getItem("refersh_token");
-  const prefix = localStorage.getItem("role") == "user" ? "Bearer" : "Admin";
+  const prefix = getPrefix();
   return axios.post(
     `${baseUrl}/users/refershToken`,
     {},
@@ -122,7 +133,7 @@ export function getUserInfo() {
 export function updateProfileImage(image: File) {
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = localStorage.getItem("access_token");
-  const prefix = localStorage.getItem("role") == "user" ? "Bearer" : "Admin";
+  const prefix = getPrefix();
   const formData = new FormData();
   formData.append("image", image!);
   return axios.patch(`${baseUrl}/users/updateProfileImage`, formData, {
@@ -164,7 +175,7 @@ export function getCars({
 export function getCar(carId: string) {
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = localStorage.getItem("access_token");
-  const prefix = localStorage.getItem("role") == "user" ? "Bearer" : "Admin";
+  const prefix = getPrefix();
   return axios.get(`${baseUrl}/cars/${carId}`, {
     headers: {
       authorization: token ? `${prefix} ${token}` : "",
@@ -175,7 +186,7 @@ export function getCar(carId: string) {
 export function createBooking(booking: BookingType) {
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = localStorage.getItem("access_token");
-  const prefix = localStorage.getItem("role") == "user" ? "Bearer" : "Admin";
+  const prefix = getPrefix();
   return axios.post(`${baseUrl}/booking/create`, booking, {
     headers: {
       authorization: token ? `${prefix} ${token}` : "",
@@ -186,7 +197,7 @@ export function createBooking(booking: BookingType) {
 export function getUserBookings() {
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = localStorage.getItem("access_token");
-  const prefix = localStorage.getItem("role") == "user" ? "Bearer" : "Admin";
+  const prefix = getPrefix();
   return axios.get(`${baseUrl}/booking/userBookings`, {
     headers: {
       authorization: token ? `${prefix} ${token}` : "",

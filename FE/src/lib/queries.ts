@@ -92,7 +92,8 @@ export function useAddCar() {
 
 export function useGetDashboardData() {
   const token = localStorage.getItem("access_token");
-  const isAdmin = localStorage.getItem("role") === "admin";
+  const { data: userInfo } = useGetUserInfo();
+  const isAdmin = userInfo?.data?.data?.role === "admin";
   return useQuery({
     queryKey: ["dashboardData"],
     queryFn: getDashboardData,
