@@ -31,13 +31,13 @@ export default function ManageCars() {
         <Card className="border-border/60 shadow-sm overflow-hidden">
           <CardContent className="p-0 overflow-x-auto">
             <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/50 hover:bg-muted/50">
-                  <TableHead className="font-semibold text-foreground">Vehicle</TableHead>
-                  <TableHead className="font-semibold text-foreground hidden md:table-cell">Category</TableHead>
-                  <TableHead className="font-semibold text-foreground">Price</TableHead>
-                  <TableHead className="font-semibold text-foreground hidden md:table-cell">Status</TableHead>
-                  <TableHead className="font-semibold text-foreground">Actions</TableHead>
+              <TableHeader className="bg-gradient-to-r from-[#7C3AED]/8 via-muted/60 to-[#06B6D4]/8 border-b border-border/60">
+                <TableRow className="hover:bg-transparent border-0">
+                  <TableHead className="font-semibold text-foreground py-4 pl-4">Vehicle</TableHead>
+                  <TableHead className="font-semibold text-foreground py-4 hidden md:table-cell">Category</TableHead>
+                  <TableHead className="font-semibold text-foreground py-4">Price / Day</TableHead>
+                  <TableHead className="font-semibold text-foreground py-4 hidden md:table-cell">Status</TableHead>
+                  <TableHead className="font-semibold text-foreground py-4 pr-4 text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
