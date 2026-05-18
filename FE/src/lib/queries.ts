@@ -1,22 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  addCar,
-  changeBookingStatus,
-  confirmEmail,
-  createBooking,
-  createUser,
-  deleteCar,
-  getAvailableCars,
-  getCar,
-  getCars,
-  getDashboardData,
-  getUserBookings,
-  getUserInfo,
-  login,
-  logout,
-  refershToken,
-  updateProfileImage,
-} from "../utils/apis";
 import type {
   AvailableCarType,
   BookingType,
@@ -24,24 +6,51 @@ import type {
   ConfirmEmailType,
   LoginType,
   UserType,
-} from "../types";
+} from "@/types";
+
+// ─── API imports ──────────────────────────────────────────────────────────────
+import {
+  createUser,
+  login,
+  confirmEmail,
+  logout,
+  refreshToken,
+} from "./auth.api";
+
+import { getUserInfo, updateProfileImage } from "./user.api";
+
+import {
+  addCar,
+  deleteCar,
+  getCar,
+  getCars,
+  getDashboardData,
+} from "./cars.api";
+
+import {
+  changeBookingStatus,
+  createBooking,
+  getAvailableCars,
+  getUserBookings,
+} from "./booking.api";
+
+// ─── Auth hooks ───────────────────────────────────────────────────────────────
+
 export function useCreateUser() {
   return useMutation({
-    mutationFn: ({ name, email, password, confirmPassword, image }: UserType) =>
-      createUser({ name, email, password, confirmPassword, image }),
+    mutationFn: (data: UserType) => createUser(data),
   });
 }
 
 export function useLogin() {
   return useMutation({
-    mutationFn: ({ email, password }: LoginType) => login({ email, password }),
+    mutationFn: (data: LoginType) => login(data),
   });
 }
 
 export function useConfirmEmail() {
   return useMutation({
-    mutationFn: ({ email, otp }: ConfirmEmailType) =>
-      confirmEmail({ email, otp }),
+    mutationFn: (data: ConfirmEmailType) => confirmEmail(data),
   });
 }
 
@@ -51,61 +60,13 @@ export function useLogout() {
   });
 }
 
-export function useAddCar() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({
-      location,
-      price_per_day,
-      description,
-      transmission,
-      fuel_type,
-      price,
-      seating_capacity,
-      category,
-      year,
-      model,
-      brand,
-      image,
-    }: CarType) =>
-      addCar({
-        location,
-        price_per_day,
-        description,
-        transmission,
-        fuel_type,
-        price,
-        seating_capacity,
-        category,
-        year,
-        model,
-        brand,
-        image,
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["dashboardData", "cars"],
-      });
-    },
-  });
-}
-
-export function useGetDashboardData() {
-  const token = localStorage.getItem("access_token");
-  const { data: userInfo } = useGetUserInfo();
-  const isAdmin = userInfo?.data?.data?.role === "admin";
-  return useQuery({
-    queryKey: ["dashboardData"],
-    queryFn: getDashboardData,
-    enabled: !!token && isAdmin,
-  });
-}
-
 export function useRefershToken() {
   return useMutation({
-    mutationFn: refershToken,
+    mutationFn: () => refreshToken(),
   });
 }
+
+// ─── User hooks ───────────────────────────────────────────────────────────────
 
 export function useGetUserInfo() {
   const token = localStorage.getItem("access_token");
@@ -122,17 +83,7 @@ export function useUpdateProfileImage() {
   });
 }
 
-export function useDeleteCar() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (carId: string) => deleteCar(carId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["dashboardData"],
-      });
-    },
-  });
-}
+// ─── Cars hooks ───────────────────────────────────────────────────────────────
 
 export function useGetCars({
   page,
@@ -153,17 +104,51 @@ export function useGetCar(carId: string) {
   return useQuery({
     queryKey: ["car", carId],
     queryFn: () => getCar(carId),
+    enabled: !!carId,
   });
 }
+
+export function useAddCar() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: CarType) => addCar(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
+      queryClient.invalidateQueries({ queryKey: ["cars"] });
+    },
+  });
+}
+
+export function useDeleteCar() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (carId: string) => deleteCar(carId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
+      queryClient.invalidateQueries({ queryKey: ["cars"] });
+    },
+  });
+}
+
+export function useGetDashboardData() {
+  const token = localStorage.getItem("access_token");
+  const { data: userInfo } = useGetUserInfo();
+  const isAdmin = userInfo?.data?.data?.role === "admin";
+  return useQuery({
+    queryKey: ["dashboardData"],
+    queryFn: getDashboardData,
+    enabled: !!token && isAdmin,
+  });
+}
+
+// ─── Booking hooks ────────────────────────────────────────────────────────────
 
 export function useCreateBooking() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (booking: BookingType) => createBooking(booking),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["userBookings"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["userBookings"] });
     },
   });
 }
@@ -180,28 +165,19 @@ export function useGetUserBookings() {
 export function useChangeBookingStatus() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      bookingId,
-      status,
-    }: {
-      bookingId: string;
-      status: string;
-    }) => changeBookingStatus({ bookingId, status }),
+    mutationFn: ({ bookingId, status }: { bookingId: string; status: string }) =>
+      changeBookingStatus({ bookingId, status }),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["userBookings"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["dashboardData"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["userBookings"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
     },
   });
 }
 
 export function useGetAvailableCars(carData: AvailableCarType) {
   return useQuery({
-    queryKey: ["availableCars" , carData],
+    queryKey: ["availableCars", carData],
     queryFn: () => getAvailableCars(carData),
-    enabled: !!carData.location && !!carData.pickupDate && !!carData.returnDate
+    enabled: !!carData.location && !!carData.pickupDate && !!carData.returnDate,
   });
 }
