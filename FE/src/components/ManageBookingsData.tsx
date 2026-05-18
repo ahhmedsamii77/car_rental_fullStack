@@ -34,41 +34,45 @@ export default function ManageBookingsData({ booking }: { booking: BookingResTyp
       : "bg-amber-100 text-amber-700 hover:bg-amber-100"
 
   return (
-    <tr className="group border-b border-border last:border-0 transition-colors">
-      {/* Car */}
-      <td className="px-4 py-3 group-hover:bg-[#7C3AED]/5 transition-colors">
-        <div className="flex items-center gap-3">
-          <Avatar className="w-12 h-12 rounded-lg shrink-0">
-            <AvatarImage src={booking.carId.image.secure_url} className="object-cover" />
-            <AvatarFallback className="rounded-lg bg-[#7C3AED]/10 text-[#7C3AED] text-xs">
-              {booking.carId.brand?.[0]}
-            </AvatarFallback>
-          </Avatar>
-          <div className="hidden md:block">
-            <p className="font-semibold text-sm">{booking.carId.brand} {booking.carId.model}</p>
-            <p className="text-xs text-muted-foreground">{booking.carId.seating_capacity} seats • {booking.carId.transmission}</p>
-          </div>
-        </div>
-      </td>
+    <div className="flex items-center gap-3 px-5 py-3 hover:bg-[#7C3AED]/5 transition-colors">
+
+      {/* Avatar + Car name */}
+      <Avatar className="w-9 h-9 rounded-lg shrink-0">
+        <AvatarImage src={booking.carId.image.secure_url} className="object-cover" />
+        <AvatarFallback className="rounded-lg bg-[#7C3AED]/10 text-[#7C3AED] text-xs font-bold">
+          {booking.carId.brand?.[0]}
+        </AvatarFallback>
+      </Avatar>
+
+      <div className="flex-1 min-w-0">
+        <p className="text-[13px] font-semibold text-foreground truncate">
+          {booking.carId.brand} {booking.carId.model}
+        </p>
+        <p className="text-[11px] text-muted-foreground truncate">
+          {booking.carId.seating_capacity} seats • {booking.carId.transmission}
+        </p>
+      </div>
 
       {/* Dates */}
-      <td className="px-4 py-3 hidden md:table-cell text-sm text-muted-foreground group-hover:bg-[#7C3AED]/5 transition-colors">
+      <span className="hidden sm:block text-[11px] text-muted-foreground shrink-0">
         {new Date(booking.pickupDate).toLocaleDateString()} → {new Date(booking.returnDate).toLocaleDateString()}
-      </td>
+      </span>
 
       {/* Price */}
-      <td className="px-4 py-3 font-semibold text-[#7C3AED] group-hover:bg-[#7C3AED]/5 transition-colors">${booking.price}</td>
+      <span className="text-[13px] font-semibold text-[#7C3AED] shrink-0">
+        ${booking.price}
+      </span>
 
       {/* Payment */}
-      <td className="px-4 py-3 hidden md:table-cell group-hover:bg-[#7C3AED]/5 transition-colors">
-        <Badge variant="outline" className="text-xs">Offline</Badge>
-      </td>
+      <Badge variant="outline" className="hidden sm:inline-flex text-[11px] shrink-0">
+        Offline
+      </Badge>
 
       {/* Status */}
-      <td className="px-4 py-3 group-hover:bg-[#7C3AED]/5 transition-colors">
+      <div className="shrink-0">
         {status === "pending" ? (
           <Select value={status} onValueChange={(val) => { if (val) handleChangeStatus(val) }}>
-            <SelectTrigger className="w-32 h-8 rounded-xl text-xs border-border/60 focus:ring-[#7C3AED]">
+            <SelectTrigger className="w-28 h-7 rounded-xl text-[11px] border-border/60 focus:ring-[#7C3AED]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
@@ -78,9 +82,11 @@ export default function ManageBookingsData({ booking }: { booking: BookingResTyp
             </SelectContent>
           </Select>
         ) : (
-          <Badge className={`text-xs capitalize font-semibold ${statusColor}`}>{status}</Badge>
+          <Badge className={`text-[11px] capitalize font-semibold ${statusColor}`}>
+            {status}
+          </Badge>
         )}
-      </td>
-    </tr>
+      </div>
+    </div>
   )
 }

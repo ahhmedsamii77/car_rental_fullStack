@@ -34,75 +34,81 @@ export default function ManageCarData({ car }: { car: CarResType }) {
   }
 
   return (
-    <tr className="group border-b border-border last:border-0 transition-colors">
-      {/* Car */}
-      <td className="px-4 py-3 group-hover:bg-[#7C3AED]/5 transition-colors">
-        <div className="flex items-center gap-3">
-          <Avatar className="w-12 h-12 rounded-lg shrink-0">
-            <AvatarImage src={car.image.secure_url} className="object-cover" />
-            <AvatarFallback className="rounded-lg bg-[#7C3AED]/10 text-[#7C3AED] text-xs">
-              {car.brand?.[0]}
-            </AvatarFallback>
-          </Avatar>
-          <div className="hidden md:block">
-            <p className="font-semibold text-sm">{car.brand} {car.model}</p>
-            <p className="text-xs text-muted-foreground">{car.seating_capacity} seats • {car.transmission}</p>
-          </div>
-        </div>
-      </td>
+    <div className="flex items-center gap-3 px-5 py-3 hover:bg-[#7C3AED]/5 transition-colors">
+
+      {/* Avatar + Name */}
+      <Avatar className="w-9 h-9 rounded-lg shrink-0">
+        <AvatarImage src={car.image.secure_url} className="object-cover" />
+        <AvatarFallback className="rounded-lg bg-[#7C3AED]/10 text-[#7C3AED] text-xs font-bold">
+          {car.brand?.[0]}
+        </AvatarFallback>
+      </Avatar>
+
+      <div className="flex-1 min-w-0">
+        <p className="text-[13px] font-semibold text-foreground truncate">
+          {car.brand} {car.model}
+        </p>
+        <p className="text-[11px] text-muted-foreground truncate">
+          {car.seating_capacity} seats • {car.transmission}
+        </p>
+      </div>
 
       {/* Category */}
-      <td className="px-4 py-3 hidden md:table-cell text-sm text-muted-foreground capitalize group-hover:bg-[#7C3AED]/5 transition-colors">{car.category}</td>
+      <span className="hidden sm:block text-[11px] text-muted-foreground capitalize shrink-0">
+        {car.category}
+      </span>
 
       {/* Price */}
-      <td className="px-4 py-3 font-semibold text-[#7C3AED] group-hover:bg-[#7C3AED]/5 transition-colors">
-        ${car.price}<span className="text-muted-foreground font-normal text-xs">/day</span>
-      </td>
+      <span className="text-[13px] font-semibold text-[#7C3AED] shrink-0">
+        ${car.price}<span className="text-muted-foreground font-normal text-[11px]">/day</span>
+      </span>
 
       {/* Status */}
-      <td className="px-4 py-3 hidden md:table-cell group-hover:bg-[#7C3AED]/5 transition-colors">
-        <Badge
-          className={`text-xs font-semibold ${
-            car.isAvailable
-              ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
-              : "bg-red-100 text-red-700 hover:bg-red-100"
-          }`}
-        >
-          {car.isAvailable ? "Available" : "Unavailable"}
-        </Badge>
-      </td>
+      <Badge
+        className={`hidden sm:inline-flex text-[11px] font-semibold shrink-0 ${
+          car.isAvailable
+            ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
+            : "bg-red-100 text-red-700 hover:bg-red-100"
+        }`}
+      >
+        {car.isAvailable ? "Available" : "Unavailable"}
+      </Badge>
 
-      {/* Actions */}
-      <td className="px-4 py-3 text-right group-hover:bg-[#7C3AED]/5 transition-colors">
-        <button
-          onClick={() => setOpen(true)}
-          className="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-red-50 hover:text-red-500 cursor-pointer transition-colors"
-          aria-label="Delete car"
-        >
-          <FiTrash2 className="w-4 h-4" />
-        </button>
+      {/* Delete button */}
+      <button
+        onClick={() => setOpen(true)}
+        className="w-7 h-7 flex items-center justify-center rounded-lg text-destructive hover:bg-destructive/10 transition-colors cursor-pointer shrink-0"
+        aria-label="Delete car"
+      >
+        <FiTrash2 size={13} />
+      </button>
 
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent className="rounded-2xl max-w-sm">
-            <DialogHeader>
-              <DialogTitle>Delete Car</DialogTitle>
-              <DialogDescription>
-                Are you sure you want to delete <strong>{car.brand} {car.model}</strong>? This action cannot be undone.
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter className="gap-2">
-              <Button variant="outline" onClick={() => setOpen(false)} className="rounded-xl cursor-pointer">Cancel</Button>
-              <Button
-                onClick={handleDeleteCar}
-                disabled={isDeleting}
-                className="bg-red-500 hover:bg-red-600 text-white rounded-xl cursor-pointer"
-              >
-                {isDeleting ? <AiOutlineLoading3Quarters className="animate-spin w-4 h-4" /> : "Delete"}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </td>
-    </tr>
+      {/* Confirm Dialog */}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="rounded-2xl max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Delete Car</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete <strong>{car.brand} {car.model}</strong>? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setOpen(false)} className="rounded-xl cursor-pointer">
+              Cancel
+            </Button>
+            <Button
+              onClick={handleDeleteCar}
+              disabled={isDeleting}
+              className="bg-red-500 hover:bg-red-600 text-white rounded-xl cursor-pointer"
+            >
+              {isDeleting
+                ? <AiOutlineLoading3Quarters className="animate-spin w-4 h-4" />
+                : "Delete"
+              }
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   )
 }

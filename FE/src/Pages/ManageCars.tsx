@@ -4,7 +4,6 @@ import Loader from "../components/shared/Loader"
 import type { CarResType } from "../types"
 import ManageCarData from "../components/ManageCarData"
 import { motion } from "motion/react"
-import { Card, CardContent } from "@/components/ui/card"
 
 export default function ManageCars() {
   const { data, isLoading } = useGetDashboardData()
@@ -21,32 +20,28 @@ export default function ManageCars() {
         transition={{ duration: 0.4 }}
         className="mt-8"
       >
-        <Card className="border-border/60 shadow-sm overflow-hidden">
-          <CardContent className="p-0 overflow-x-auto">
-            <table className="w-full text-sm border-collapse border-spacing-0">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="bg-muted text-left font-semibold text-foreground px-4 py-3">Vehicle</th>
-                  <th className="bg-muted text-left font-semibold text-foreground px-4 py-3 hidden md:table-cell">Category</th>
-                  <th className="bg-muted text-left font-semibold text-foreground px-4 py-3">Price / Day</th>
-                  <th className="bg-muted text-left font-semibold text-foreground px-4 py-3 hidden md:table-cell">Status</th>
-                  <th className="bg-muted text-right font-semibold text-foreground px-4 py-3">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cars.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="text-center py-16 text-muted-foreground">
-                      No cars listed yet. Go to <strong>Add Car</strong> to get started.
-                    </td>
-                  </tr>
-                ) : (
-                  cars.map((car) => <ManageCarData key={car._id} car={car} />)
-                )}
-              </tbody>
-            </table>
-          </CardContent>
-        </Card>
+        <div className="rounded-2xl border border-border/60 shadow-sm overflow-hidden flex flex-col">
+
+          {/* Header */}
+          <div className="px-5 py-4 border-b border-border flex items-center justify-between bg-muted/40 shrink-0">
+            <div>
+              <h3 className="text-[14px] font-bold text-foreground">Cars</h3>
+              <p className="text-[12px] text-muted-foreground">{cars.length} total vehicles</p>
+            </div>
+          </div>
+
+          {/* Rows */}
+          <div className="divide-y divide-border/60">
+            {cars.length === 0 ? (
+              <p className="text-center text-muted-foreground text-[13px] py-8">
+                No cars listed yet. Go to <strong>Add Car</strong> to get started.
+              </p>
+            ) : (
+              cars.map((car) => <ManageCarData key={car._id} car={car} />)
+            )}
+          </div>
+
+        </div>
       </motion.div>
     </section>
   )
