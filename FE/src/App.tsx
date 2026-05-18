@@ -14,36 +14,39 @@ import NotFound from "./Pages/NotFound";
 import CarDetails from "./Pages/CarDetails";
 import Cars from "./Pages/Cars";
 import MyBookings from "./Pages/MyBookings";
-import { ProtectedRoute, AdminRoute } from "./components/shared/ProtectedRoute";
+import AppGuard from "./Guards/AppGuard";
 
 const router = createBrowserRouter([
   {
     path: "", element: <Layout />, children: [
-      // ─── Public pages ───────────────────────────────────
+      // ─── Public pages ───────────────────────────────────────────
       { index: true,                element: <Home /> },
       { path: "/home",              element: <Home /> },
       { path: "/cars",              element: <Cars /> },
       { path: "/carDetails/:carId", element: <CarDetails /> },
 
-      // ─── Auth required ──────────────────────────────────
-      { path: "/myBookings", loader: ProtectedRoute, element: <MyBookings /> },
-
-      // ─── Admin required ──────────────────────────────────
+      // ─── Auth required ──────────────────────────────────────────
       {
-        path: "/dashboard", element: <AdminLayout />, children: [
-          { index: true,             loader: AdminRoute, element: <Dashboard /> },
-          { path: "addCar",          loader: AdminRoute, element: <AddCar /> },
-          { path: "manageCars",      loader: AdminRoute, element: <ManageCars /> },
-          { path: "manageBookings",  loader: AdminRoute, element: <ManageBookings /> },
-        ]
+        path: "/myBookings",
+        element: <AppGuard><MyBookings /></AppGuard>,
+      },
+
+      // ─── Admin required ─────────────────────────────────────────
+      {
+        path: "/dashboard",
+        element: <AppGuard><AdminLayout /></AppGuard>,
+        children: [
+          { index: true,            element: <Dashboard /> },
+          { path: "addCar",         element: <AddCar /> },
+          { path: "manageCars",     element: <ManageCars /> },
+          { path: "manageBookings", element: <ManageBookings /> },
+        ],
       },
 
       { path: "*", element: <NotFound /> },
-    ]
-  }
+    ],
+  },
 ]);
-
-
 
 export default function App() {
   return (
@@ -55,5 +58,5 @@ export default function App() {
       </QueryClientProvider>
       <Toaster position="bottom-right" containerStyle={{ fontSize: "14px" }} />
     </>
-  )
+  );
 }
