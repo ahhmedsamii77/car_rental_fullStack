@@ -7,12 +7,12 @@ import {
 } from "../../DB/index.js";
 import {
   hash,
-  eventEmitter,
   compare,
   generateToken,
   verifyToken,
 } from "../../utils/index.js";
 import cloudinary from "../../utils/cloudinary/index.js";
+import { sendConfirmEmail } from "../../utils/emailEvents/index.js";
 // register
 export async function register(req, res, next) {
   const { name, email, password } = req.body;
@@ -28,7 +28,7 @@ export async function register(req, res, next) {
     email,
     password: hashPassword,
   });
-  eventEmitter.emit("confirmEmail", { userId: user._id, email });
+  await sendConfirmEmail({ userId: user._id, email });
   return res.status(201).json({ message: "user created successfully" });
 }
 
@@ -101,11 +101,11 @@ export async function login(req, res, next) {
         user.isBanned = undefined;
         user.bannedAt = undefined;
         await user.save();
-        eventEmitter.emit("confirmEmail", { userId: user._id, email });
+        await sendConfirmEmail({ userId: user._id, email });
         return res.status(200).json({ message: "code send to your email" });
       }
     }
-    eventEmitter.emit("confirmEmail", { userId: user._id, email });
+    await sendConfirmEmail({ userId: user._id, email });
     return res.status(200).json({ message: "code send to your email" });
   }
   const jwtid = nanoid();

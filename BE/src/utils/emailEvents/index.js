@@ -1,14 +1,11 @@
-import { EventEmitter } from "node:events";
-import { nanoid } from "nanoid"
-import { hash } from "../index.js"
+import { nanoid } from "nanoid";
+import { hash } from "../index.js";
 import { otpModel } from "../../DB/index.js";
-import { sendEmail } from "../../service/sendEmail.js"
-import { otpEmailTemplate } from "./emailTemplate.js"
+import { sendEmail } from "../../service/sendEmail.js";
+import { otpEmailTemplate } from "./emailTemplate.js";
 
-export const eventEmitter = new EventEmitter();
-
-eventEmitter.on("confirmEmail", async (data) => {
-  const { userId, email } = data;
+/** Direct async function — safe for Vercel serverless (no EventEmitter fire-and-forget) */
+export async function sendConfirmEmail({ userId, email }) {
   const code = nanoid(4);
   const hashCode = await hash({ plaintext: code });
 
@@ -29,4 +26,4 @@ eventEmitter.on("confirmEmail", async (data) => {
   if (!isSend) {
     throw new Error("error send email", { cause: 500 });
   }
-});
+}
