@@ -23,14 +23,14 @@ export default function ManageCars() {
       >
         <Card className="border-border/60 shadow-sm overflow-hidden">
           <CardContent className="p-0 overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm border-collapse border-spacing-0">
               <thead>
-                <tr className=" border-b border-border">
-                  <th className="text-left font-semibold text-foreground px-4 ">Vehicle</th>
-                  <th className="text-left font-semibold text-foreground px-4  hidden md:table-cell">Category</th>
-                  <th className="text-left font-semibold text-foreground px-4 ">Price / Day</th>
-                  <th className="text-left font-semibold text-foreground px-4  hidden md:table-cell">Status</th>
-                  <th className="text-right font-semibold text-foreground px-4 ">Actions</th>
+                <tr className="bg-muted border-b border-border">
+                  <th className="text-left font-semibold text-foreground px-4 py-3">Vehicle</th>
+                  <th className="text-left font-semibold text-foreground px-4 py-3 hidden md:table-cell">Category</th>
+                  <th className="text-left font-semibold text-foreground px-4 py-3">Price / Day</th>
+                  <th className="text-left font-semibold text-foreground px-4 py-3 hidden md:table-cell">Status</th>
+                  <th className="text-right font-semibold text-foreground px-4 py-3">Actions</th>
                 </tr>
               </thead>
               <tbody>
