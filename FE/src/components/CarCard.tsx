@@ -9,6 +9,7 @@ import { motion } from "motion/react"
 
 export default function CarCard({ car }: { car: CarResType }) {
   return (
+    
     <motion.div whileHover={{ y: -6, scale: 1.01 }} transition={{ duration: 0.25 }}>
       <Link to={`/carDetails/${car._id}`}>
         <Card className="overflow-hidden shadow-sm hover:shadow-violet group cursor-pointer border-border/60 transition-shadow duration-300 h-full">
