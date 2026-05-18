@@ -63,11 +63,6 @@ export default function ManageBookingsData({ booking }: { booking: BookingResTyp
         ${booking.price}
       </span>
 
-      {/* Payment */}
-      <Badge variant="outline" className="hidden sm:inline-flex text-[11px] shrink-0">
-        Offline
-      </Badge>
-
       {/* Status */}
       <div className="shrink-0">
         {status === "pending" ? (
