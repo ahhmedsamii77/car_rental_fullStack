@@ -98,7 +98,6 @@ export function refershToken() {
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = localStorage.getItem("refersh_token");
   const prefix = localStorage.getItem("role") == "user" ? "Bearer" : "Admin";
-  console.log(prefix);
   return axios.post(
     `${baseUrl}/users/refershToken`,
     {},
@@ -123,11 +122,12 @@ export function getUserInfo() {
 export function updateProfileImage(image: File) {
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = localStorage.getItem("access_token");
+  const prefix = localStorage.getItem("role") == "user" ? "Bearer" : "Admin";
   const formData = new FormData();
   formData.append("image", image!);
   return axios.patch(`${baseUrl}/users/updateProfileImage`, formData, {
     headers: {
-      authorization: token ? `Admin ${token}` : "",
+      authorization: token ? `${prefix} ${token}` : "",
     },
   });
 }

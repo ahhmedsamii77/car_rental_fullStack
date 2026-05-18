@@ -103,6 +103,9 @@ export type DashboardType = {
   pendingBookings: BookingResType[];
   completedBookings: BookingResType[];
   monthlyEarnings: number;
+  totalEarnings: number;
+  totalCars: number;
+  totalBookings: number;
 };
 
 

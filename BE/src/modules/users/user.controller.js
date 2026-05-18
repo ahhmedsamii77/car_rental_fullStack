@@ -27,4 +27,4 @@ userRouter.get("/userInfo", authentication, US.getUserInfo);
 userRouter.patch("/changeRuleToAdmin", authentication, US.changeRuleToAdmin);
 
 // update profile image
-userRouter.patch("/updateProfileImage", authentication, authorization([userRoles.admin]), Multer(customExtensions.image).single("image"), US.updteProfileImage);
+userRouter.patch("/updateProfileImage", authentication, Multer(customExtensions.image).single("image"), US.updteProfileImage);

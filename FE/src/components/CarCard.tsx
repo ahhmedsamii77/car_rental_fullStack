@@ -1,41 +1,79 @@
-import { Link } from "react-router-dom";
-import type { CarResType } from "../types";
-import { IoMdPeople } from "react-icons/io";
-import { MdLocalGasStation } from "react-icons/md";
-import { FaCarSide, FaLocationDot } from "react-icons/fa6";
+import { Link } from "react-router-dom"
+import type { CarResType } from "../types"
+import { IoMdPeople } from "react-icons/io"
+import { MdLocalGasStation } from "react-icons/md"
+import { FaCarSide, FaLocationDot } from "react-icons/fa6"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
+import { motion } from "motion/react"
 
 export default function CarCard({ car }: { car: CarResType }) {
   return (
-    <Link to={`/carDetails/${car._id}`} className="rounded-lg shadow-lg overflow-hidden group hover:-translate-y-1.5 transition duration-400">
-      <div className="relative">
-        <img className="w-full h-52 object-cover group-hover:scale-105  transition duration-400" src={car.image.secure_url} alt={car.category} />
-        <span className="text-xs text-white bg-primary px-2 py-1 absolute top-3 left-2 rounded-full">{car.isAvailable ? "Available" : "Unavailable"}</span>
-        <span className=" text-white px-3 py-2 absolute bottom-3 right-2 rounded-lg bg-black">${car.price}<span className="text-gray-400">/day</span></span>
-      </div>
-      <div className="p-3 space-y-4">
-        <div>
-          <p className="font-medium text-lg capitalize">{car.brand} {car.model}</p>
-          <p className="text-sm text-gray-900 capitalize">{car.category} • {car.year}</p>
-        </div>
-        <ul className="text-gray-500 grid grid-cols-2 gap-2 space-y-1">
-          <li className="flex items-center gap-3 text-sm ">
-            <IoMdPeople className="w-5 h-5" />
-            <span>{car.seating_capacity} Seats</span>
-          </li>
-          <li className="flex items-center gap-3 text-sm capitalize">
-            <MdLocalGasStation className="w-5 h-5" />
-            <span>{car.fuel_type}</span>
-          </li>
-          <li className="flex items-center gap-3 text-sm capitalize">
-            <FaCarSide className="w-5 h-5" />
-            <span>{car.transmission}</span>
-          </li>
-          <li className="flex items-center gap-3 text-sm capitalize">
-            <FaLocationDot className="w-5 h-5" />
-            <span>{car.location}</span>
-          </li>
-        </ul>
-      </div>
-    </Link>
+    <motion.div whileHover={{ y: -6, scale: 1.01 }} transition={{ duration: 0.25 }}>
+      <Link to={`/carDetails/${car._id}`}>
+        <Card className="overflow-hidden shadow-sm hover:shadow-violet group cursor-pointer border-border/60 transition-shadow duration-300 h-full">
+          {/* Image */}
+          <div className="relative overflow-hidden h-52">
+            <img
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              src={car.image.secure_url}
+              alt={car.category}
+            />
+            {/* Overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+
+            {/* Badges */}
+            <Badge
+              className={`absolute top-3 left-3 text-xs font-semibold ${
+                car.isAvailable
+                  ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                  : "bg-red-500 text-white hover:bg-red-600"
+              }`}
+            >
+              {car.isAvailable ? "Available" : "Unavailable"}
+            </Badge>
+
+            {/* Price tag */}
+            <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-sm text-slate-900 px-3 py-1.5 rounded-xl text-sm font-bold shadow-lg">
+              <span className="text-[#7C3AED]">${car.price}</span>
+              <span className="text-slate-400 font-normal text-xs">/day</span>
+            </div>
+          </div>
+
+          <CardContent className="p-4 space-y-4">
+            {/* Name & category */}
+            <div>
+              <h3 className="font-bold text-base capitalize text-foreground">
+                {car.brand} {car.model}
+              </h3>
+              <p className="text-xs text-muted-foreground capitalize mt-0.5">
+                {car.category} • {car.year}
+              </p>
+            </div>
+
+            {/* Specs grid */}
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+              {[
+                { icon: IoMdPeople,         label: `${car.seating_capacity} Seats`,  color: "text-[#7C3AED]" },
+                { icon: MdLocalGasStation,  label: car.fuel_type,                   color: "text-[#F59E0B]" },
+                { icon: FaCarSide,          label: car.transmission,                color: "text-[#06B6D4]" },
+                { icon: FaLocationDot,      label: car.location,                    color: "text-[#10B981]" },
+              ].map(({ icon: Icon, label, color }) => (
+                <div key={label} className="flex items-center gap-1.5 text-muted-foreground">
+                  <Icon className={`w-3.5 h-3.5 shrink-0 ${color}`} />
+                  <span className="text-xs capitalize truncate">{label}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA bar */}
+            <div className="flex items-center justify-between pt-2 border-t border-border/60">
+              <span className="text-xs text-muted-foreground">Tap to view details</span>
+              <span className="text-xs font-semibold text-[#7C3AED] group-hover:underline">Book Now →</span>
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
+    </motion.div>
   )
 }

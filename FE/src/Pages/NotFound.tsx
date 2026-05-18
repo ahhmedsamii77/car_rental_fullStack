@@ -1,17 +1,38 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
+import { motion } from "motion/react"
+import { Button } from "@/components/ui/button"
+import { FiArrowLeft } from "react-icons/fi"
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center text-sm max-md:px-4 h-screen!">
-      <h1 className="text-8xl md:text-9xl font-bold text-primary">404</h1>
-      <div className="h-1 w-16 rounded bg-primary my-5 md:my-7" />
-      <p className="text-2xl md:text-3xl font-bold text-gray-800">Page Not Found</p>
-      <p className="text-sm md:text-base mt-4 text-gray-500 max-w-md text-center">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
-      <div className="flex items-center gap-4 mt-6">
-        <Link to="/" className="bg-gray-800 hover:bg-black px-7 py-2.5 text-white rounded-md active:scale-95 transition-all">
-          Return Home
+    <div className="min-h-screen gradient-hero flex items-center justify-center px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="text-center max-w-md"
+      >
+        {/* Big 404 */}
+        <div className="relative mb-6">
+          <p className="text-[120px] font-black leading-none bg-gradient-to-br from-[#7C3AED] via-[#6366F1] to-[#06B6D4] bg-clip-text text-transparent select-none">
+            404
+          </p>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#7C3AED]/10 to-[#06B6D4]/10 blur-3xl -z-10 rounded-full" />
+        </div>
+
+        <h1 className="text-2xl font-bold mb-3 font-[family-name:var(--font-display)]">
+          Page Not Found
+        </h1>
+        <p className="text-muted-foreground mb-8 leading-relaxed">
+          Looks like you took a wrong turn. The page you're looking for doesn't exist or has been moved.
+        </p>
+
+        <Link to="/">
+          <Button className="gradient-primary text-white rounded-full px-8 py-2.5 font-semibold gap-2 hover:opacity-90 transition cursor-pointer">
+            <FiArrowLeft className="w-4 h-4" /> Back to Home
+          </Button>
         </Link>
-      </div>
+      </motion.div>
     </div>
   )
 }

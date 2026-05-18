@@ -1,60 +1,97 @@
-import { useFormik } from "formik";
-import { MdOutlineSearch } from "react-icons/md";
-import type { AvailableCarType } from "../types";
-import { useNavigate } from "react-router-dom";
-import * as yup from "yup";
+import { useFormik } from "formik"
+import { MdOutlineSearch } from "react-icons/md"
+import type { AvailableCarType } from "../types"
+import { useNavigate } from "react-router-dom"
+import * as yup from "yup"
 import { motion } from "motion/react"
+import { Button } from "@/components/ui/button"
+import { FaMapMarkerAlt, FaCalendarAlt } from "react-icons/fa"
+
 export default function BookingInput() {
-  const navigate = useNavigate();
-  const initialValues: AvailableCarType = {
-    returnDate: "",
-    pickupDate: "",
-    location: ""
-  }
+  const navigate = useNavigate()
+  const initialValues: AvailableCarType = { returnDate: "", pickupDate: "", location: "" }
+
   function onSubmit(values: AvailableCarType) {
-    console.log(values)
-    navigate(`/cars?pickupDate=${values.pickupDate}&returnDate=${values.returnDate}&location=${values.location}`);
+    navigate(`/cars?pickupDate=${values.pickupDate}&returnDate=${values.returnDate}&location=${values.location}`)
   }
-  const availableCarsFormik = useFormik({
+
+  const formik = useFormik({
     initialValues,
     onSubmit,
     validationSchema: yup.object().shape({
-      location: yup.string().required("Location is required"),
-      pickupDate: yup.string().required("Pickup Date is required"),
-      returnDate: yup.string().required("Return Date is required"),
-    })
+      location:   yup.string().required(),
+      pickupDate: yup.string().required(),
+      returnDate: yup.string().required(),
+    }),
   })
+
   return (
     <motion.form
-      initial={{ opacity: 0, y: -100, scale: 0.8 }}
+      initial={{ opacity: 0, y: 40, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-      onSubmit={availableCarsFormik.handleSubmit} className="bg-white rounded-lg p-6 mt-15 max-w-80 w-full flex flex-col gap-5 md:gap-8 shadow md:flex-row md:max-w-3xl md:rounded-full md:pl-15">
-      <div className="flex flex-col gap-2 justify-center">
-        <select value={availableCarsFormik.values.location} onChange={availableCarsFormik.handleChange} className="outline-primary w-fit" name="location" >
-          <option value={""} disabled >Pickup Location</option>
-          <option value={"New York"}>New York</option>
-          <option value={"Los Angeles"}>Los Angeles</option>
-          <option value={"Houston"}>Houston</option>
-          <option value={"Chicago"}>Chicago</option>
-        </select>
-        <label className="text-sm text-gray-500" htmlFor="pickup-location">Please select location</label>
+      transition={{ duration: 0.5, delay: 0.3 }}
+      onSubmit={formik.handleSubmit}
+      className="bg-white rounded-2xl shadow-violet-lg p-4 mt-10 w-full max-w-3xl border border-border/60"
+    >
+      <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-end">
+
+        {/* Location */}
+        <div className="flex-1 min-w-0">
+          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
+            <FaMapMarkerAlt className="text-[#7C3AED]" /> Location
+          </label>
+          <select
+            name="location"
+            value={formik.values.location}
+            onChange={formik.handleChange}
+            className="w-full rounded-xl border border-border bg-muted/40 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/50 cursor-pointer"
+          >
+            <option value="" disabled>Select city</option>
+            <option value="New York">New York</option>
+            <option value="Los Angeles">Los Angeles</option>
+            <option value="Houston">Houston</option>
+            <option value="Chicago">Chicago</option>
+          </select>
+        </div>
+
+        {/* Pickup */}
+        <div className="flex-1 min-w-0">
+          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
+            <FaCalendarAlt className="text-[#F59E0B]" /> Pickup Date
+          </label>
+          <input
+            type="date"
+            id="pickupDate"
+            value={formik.values.pickupDate}
+            onChange={formik.handleChange}
+            className="w-full rounded-xl border border-border bg-muted/40 px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/50"
+          />
+        </div>
+
+        {/* Return */}
+        <div className="flex-1 min-w-0">
+          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
+            <FaCalendarAlt className="text-[#06B6D4]" /> Return Date
+          </label>
+          <input
+            type="date"
+            id="returnDate"
+            value={formik.values.returnDate}
+            onChange={formik.handleChange}
+            className="w-full rounded-xl border border-border bg-muted/40 px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/50"
+          />
+        </div>
+
+        {/* Search */}
+        <Button
+          type="submit"
+          disabled={!formik.isValid || !formik.dirty}
+          className="gradient-primary text-white rounded-xl px-6 py-2.5 h-auto gap-2 hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+        >
+          <MdOutlineSearch className="w-5 h-5" />
+          Search
+        </Button>
       </div>
-      <div className="flex flex-col gap-2 justify-center">
-        <label htmlFor="pickupDate">Pickup date</label>
-        <input value={availableCarsFormik.values.pickupDate} onChange={availableCarsFormik.handleChange} id="pickupDate" className="outline-primary w-fit text-sm text-gray-500" type="date" />
-      </div>
-      <div className="flex flex-col gap-2 justify-center">
-        <label htmlFor="returnDate">Return date</label>
-        <input value={availableCarsFormik.values.returnDate} onChange={availableCarsFormik.handleChange} id="returnDate" className="outline-primary w-fit text-sm text-gray-500" type="date" />
-      </div>
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        type="submit" disabled={!availableCarsFormik.isValid || !availableCarsFormik.dirty} className={`text-white  md:ml-auto flex items-center  justify-center gap-1 w-fit hover:bg-primary-dull   px-6  rounded-full ${!availableCarsFormik.isValid || !availableCarsFormik.dirty ? "bg-blue-400 cursor-not-allowed" : "cursor-pointer bg-primary hover:bg-primary-dull"}`}>
-        <MdOutlineSearch className="w-5 h-5" />
-        <span>Search</span>
-      </motion.button>
     </motion.form>
   )
 }

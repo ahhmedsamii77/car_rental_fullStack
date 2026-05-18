@@ -1,35 +1,62 @@
-import ManageBookingsData from "../components/ManageBookingsData";
-import Loader from "../components/shared/Loader";
-import { useGetDashboardData } from "../lib/queries";
-import type { DashboardType } from "../types";
+import Title from "../components/shared/Title"
+import { useGetDashboardData } from "../lib/queries"
+import Loader from "../components/shared/Loader"
+import type { BookingResType } from "../types"
+import ManageBookingsData from "../components/ManageBookingsData"
+import { motion } from "motion/react"
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Card, CardContent } from "@/components/ui/card"
 
 export default function ManageBookings() {
-  const { data, isLoading } = useGetDashboardData();
-  if (isLoading) {
-    return <Loader />;
-  }
-  const dashboardData: DashboardType = data?.data.dashboardData;
+  const { data, isLoading } = useGetDashboardData()
+  if (isLoading) return <Loader />
+  const bookings: BookingResType[] = data?.data.dashboardData.bookings ?? []
+
   return (
-    <div className="py-10 flex flex-col justify-between max-w-5xl">
-      <div className="w-full">
-        <h2 className="pb-4 text-lg font-medium">All Products</h2>
-        <div className="flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
-          <table className="md:table-auto table-fixed w-full overflow-hidden">
-            <thead className="text-gray-900 text-sm text-left">
-              <tr>
-                <th className="px-4 py-3 font-semibold truncate">Car</th>
-                <th className="px-4 py-3 font-semibold truncate max-md:hidden">Date Range</th>
-                <th className="px-4 py-3 font-semibold truncate">Total</th>
-                <th className="px-4 py-3 font-semibold truncate  max-md:hidden">Payment</th>
-                <th className="px-4 py-3 font-semibold truncate">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm text-gray-500">
-              {dashboardData.bookings.map(booking => <ManageBookingsData key={booking._id} booking={booking} />)}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <section className="mb-10 max-w-5xl">
+      <Title title="Manage Bookings" description="Review, confirm, or cancel customer reservations." />
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="mt-8"
+      >
+        <Card className="border-border/60 shadow-sm overflow-hidden">
+          <CardContent className="p-0 overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/50 hover:bg-muted/50">
+                  <TableHead className="font-semibold text-foreground">Vehicle</TableHead>
+                  <TableHead className="font-semibold text-foreground hidden md:table-cell">Dates</TableHead>
+                  <TableHead className="font-semibold text-foreground">Price</TableHead>
+                  <TableHead className="font-semibold text-foreground hidden md:table-cell">Payment</TableHead>
+                  <TableHead className="font-semibold text-foreground">Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {bookings.length === 0 ? (
+                  <TableRow>
+                    <td colSpan={5} className="text-center py-16 text-muted-foreground text-sm">
+                      No bookings yet.
+                    </td>
+                  </TableRow>
+                ) : (
+                  bookings.map((booking) => (
+                    <ManageBookingsData key={booking._id} booking={booking} />
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </section>
   )
 }

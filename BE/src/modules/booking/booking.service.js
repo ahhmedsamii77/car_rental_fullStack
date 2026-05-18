@@ -3,7 +3,12 @@ import { bookingModel, bookingStatus, carModel, userRoles } from "../../DB/index
 
 // check availability of car by given date
 export async function checkAvailability({ carId, pickupDate, returnDate }) {
-  const isAvailable = await bookingModel.findOne({ carId, pickupDate: { $lt: returnDate }, returnDate: { $gt: pickupDate } });
+  const isAvailable = await bookingModel.findOne({
+    carId,
+    status: { $ne: bookingStatus.cancelled },
+    pickupDate: { $lt: returnDate },
+    returnDate: { $gt: pickupDate }
+  });
   return !isAvailable;
 }
 
@@ -71,14 +76,14 @@ export async function getOwnerBookings(req, res, next) {
 export async function changeBookingStatus(req, res, next) {
   const { bookingId } = req.params;
   const { status } = req.body;
-  const booking = await bookingModel.findOne({ _id: bookingId, owner: req.user._id });
-  if (status.toLowerCase() == bookingStatus.cancelled) {
+  if (status.toLowerCase() === bookingStatus.cancelled) {
     const booking = await bookingModel.findOneAndDelete({ _id: bookingId, owner: req.user._id });
     if (!booking) {
       throw new Error("booking not found", { cause: 404 });
     }
     return res.status(200).json({ message: "booking cancelled successfully", booking });
   }
+  const booking = await bookingModel.findOne({ _id: bookingId, owner: req.user._id });
   if (!booking) {
     throw new Error("booking not found", { cause: 404 });
   }

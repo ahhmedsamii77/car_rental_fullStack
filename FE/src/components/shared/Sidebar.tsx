@@ -1,59 +1,66 @@
-import { NavLink, useLocation } from "react-router-dom";
-import { MdOutlineAddBox, MdOutlineDashboard } from "react-icons/md";
-import { FaCarSide } from "react-icons/fa6";
-import { CiViewList } from "react-icons/ci";
-import type { SidebarLinksType, UserInfoType } from "../../types";
-import { useGetUserInfo, useUpdateProfileImage } from "../../lib/queries";
-import Loader from "./Loader";
-import { FiEdit } from "react-icons/fi";
-import { useState } from "react";
-import toast from "react-hot-toast";
-const sidebarLinks: SidebarLinksType[] = [
-  { name: "Dashboard", path: "/dashboard", icon: MdOutlineDashboard },
-  { name: "Add Car", path: "addCar", icon: MdOutlineAddBox },
-  { name: "Manage Cars", path: "manageCars", icon: FaCarSide },
-  { name: "Manage Bookings", path: "manageBookings", icon: CiViewList },
-];
+import { NavLink } from "react-router-dom"
+import { MdDashboard, MdDirectionsCar, MdBookOnline, MdAddBox } from "react-icons/md"
+import { motion } from "motion/react"
+import { Separator } from "@/components/ui/separator"
+import { FaCar } from "react-icons/fa6"
+
+const sidebarLinks = [
+  { name: "Overview",        path: "/dashboard",                icon: MdDashboard },
+  { name: "Add Car",         path: "/dashboard/addCar",         icon: MdAddBox },
+  { name: "Manage Cars",     path: "/dashboard/manageCars",     icon: MdDirectionsCar },
+  { name: "Manage Bookings", path: "/dashboard/manageBookings", icon: MdBookOnline },
+]
+
 export default function Sidebar() {
-  const { data, isLoading } = useGetUserInfo();
-  const user: UserInfoType = data?.data.user;
-  const { mutateAsync: updateProfileImage } = useUpdateProfileImage();
-  const [profileImage, setProfileImage] = useState<File | null>(null);
-  const location = useLocation();
-  const path = location.pathname.split("/")[2];
-  if (isLoading) {
-    return <Loader />;
-  }
-  async function handleUpdateProfileImage(e: React.ChangeEvent<HTMLInputElement>) {
-    try {
-      setProfileImage(e.target.files?.[0]!);
-      await updateProfileImage(e.target.files?.[0]!);
-      toast.success("Profile image updated successfully");
-    } catch (error: any) {
-      toast.error(error?.response.data.message);
-    }
-  }
   return (
-    <aside className="md:w-64 w-16 border-r  text-base min-h-screen  border-gray-300 pt-4 flex flex-col transition-all duration-300">
-      <div className="flex items-center justify-center mb-6 flex-col">
-        <label htmlFor="profile" className="relative group ">
-          <img className="md:h-15 md:w-15 rounded-full w-10 h-10 cursor-pointer" src={profileImage ? URL.createObjectURL(profileImage) : user?.profileImage?.secure_url? user?.profileImage?.secure_url : "p"} alt={user.name} />
-          <div className="absolute  top-0 right-0 bottom-0 hidden group-hover:flex transition duration-400  left-0 bg-black/35 cursor-pointer rounded-full  items-center justify-center">
-            <FiEdit className="w-4 h-4 text-white" />
-          </div>
-        </label>
-        <input onChange={handleUpdateProfileImage} id="profile" className="hidden" type="file" accept="image/*" />
+    <motion.aside
+      initial={{ x: -80, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      className="hidden md:flex flex-col w-60 min-h-screen bg-slate-900 text-white shrink-0"
+    >
+      {/* Brand */}
+      <div className="flex items-center gap-2 px-5 py-5">
+        <div className="gradient-primary w-9 h-9 rounded-xl flex items-center justify-center shrink-0">
+          <FaCar className="w-4 h-4 text-white" />
+        </div>
+        <span className="font-bold text-base font-[family-name:var(--font-display)] bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
+          DriveEase
+        </span>
       </div>
-      {sidebarLinks.map((item, index) => (
-        <NavLink to={item.path} key={index}
-          className={`flex items-center py-3 px-4 gap-3 side-link  
-            ${path === item.path || path === undefined && index === 0 ? "border-r-4 md:border-r-[6px] bg-primary/10 border-primary text-primary" : "hover:bg-gray-100/90 border-white text-gray-700"}
-            `}
-        >
-          <item.icon className={`w-5 h-5 opacity-50 ${path === item.path || path === undefined && index === 0 ? "opacity-100" : "opacity-50"}`} />
-          <p className="md:block hidden text-center">{item?.name}</p>
-        </NavLink>
-      ))}
-    </aside>
+
+      <Separator className="bg-white/10 mx-4 w-auto" />
+
+      {/* Label */}
+      <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest px-5 pt-5 pb-2">
+        Admin Panel
+      </p>
+
+      {/* Nav links */}
+      <nav className="flex flex-col gap-1 px-3 flex-1">
+        {sidebarLinks.map(({ name, path, icon: Icon }) => (
+          <NavLink
+            key={name}
+            to={path}
+            end={path === "/dashboard"}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                isActive
+                  ? "bg-[#7C3AED] text-white shadow-md"
+                  : "text-slate-400 hover:bg-white/10 hover:text-white"
+              }`
+            }
+          >
+            <Icon className="w-5 h-5 shrink-0" />
+            {name}
+          </NavLink>
+        ))}
+      </nav>
+
+      {/* Footer */}
+      <div className="px-5 py-4 border-t border-white/10">
+        <p className="text-xs text-slate-500">© {new Date().getFullYear()} DriveEase</p>
+      </div>
+    </motion.aside>
   )
 }

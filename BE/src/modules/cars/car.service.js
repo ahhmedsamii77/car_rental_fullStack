@@ -87,12 +87,19 @@ export async function getDashboardData(req, res, next) {
     (total, booking) => total + booking.price,
     0
   );
+  const totalEarnings = bookings.reduce(
+    (total, booking) => total + booking.price,
+    0
+  );
   const dashboardData = {
     cars,
     bookings,
     pendingBookings,
     completedBookings,
     monthlyEarnings,
+    totalEarnings,
+    totalCars: cars.length,
+    totalBookings: bookings.length,
   };
   return res.status(200).json({ message: "dashboard data", dashboardData });
 }
@@ -101,15 +108,17 @@ export async function getDashboardData(req, res, next) {
 // get cars
 export async function getCars(req, res, next) {
   let { page, limit, query } = req.query;
-  if (!page) page = +page || 1;
-  if (!limit) limit = +limit || 6;
+  page = parseInt(page) || 1;
+  limit = parseInt(limit) || 6;
   if (query) {
     query = query.toLowerCase();
-    const cars = await carModel.find({ isAvailable: true, $or: [{ brand: { $regex: query,$options: "i" } }, { model: { $regex: query,$options: "i" } }] }).skip((page - 1) * limit).limit(limit);
-    return res.status(200).json({ message: "cars", page, cars });
+    const total = await carModel.countDocuments({ isAvailable: true, $or: [{ brand: { $regex: query, $options: "i" } }, { model: { $regex: query, $options: "i" } }] });
+    const cars = await carModel.find({ isAvailable: true, $or: [{ brand: { $regex: query, $options: "i" } }, { model: { $regex: query, $options: "i" } }] }).skip((page - 1) * limit).limit(limit);
+    return res.status(200).json({ message: "cars", page, total, cars });
   }
+  const total = await carModel.countDocuments({ isAvailable: true });
   const cars = await carModel.find({ isAvailable: true }).skip((page - 1) * limit).limit(limit);
-  return res.status(200).json({ message: "cars", page, cars });
+  return res.status(200).json({ message: "cars", page, total, cars });
 }
 
 

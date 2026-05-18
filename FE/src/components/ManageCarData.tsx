@@ -1,47 +1,110 @@
-import { useState } from "react";
-import type { CarResType } from "../types";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { MdDelete } from "react-icons/md";
-import { useDeleteCar } from "../lib/queries";
-import toast from "react-hot-toast";
+import { useState } from "react"
+import type { CarResType } from "../types"
+import { useDeleteCar } from "../lib/queries"
+import toast from "react-hot-toast"
+import { TableCell, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { AiOutlineLoading3Quarters } from "react-icons/ai"
+import { FiTrash2 } from "react-icons/fi"
 
 export default function ManageCarData({ car }: { car: CarResType }) {
-  const [isDeleting, setIsDeleting] = useState(false);
-  const { mutateAsync: deleteCar } = useDeleteCar();
-  async function handleDeleteCar(carId: string) {
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [open, setOpen]             = useState(false)
+  const { mutateAsync: deleteCar }  = useDeleteCar()
+
+  async function handleDeleteCar() {
     setIsDeleting(true)
     try {
-      await deleteCar(carId);
-      toast.success("Car deleted successfully");
-    } catch (error) {
-      toast.error("Something went wrong");
+      await deleteCar(car._id)
+      toast.success("Car deleted successfully")
+      setOpen(false)
+    } catch {
+      toast.error("Something went wrong")
     }
     setIsDeleting(false)
   }
+
   return (
-    <tr className="border-t border-gray-500/20">
-      <td className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate">
-        <div className="rounded overflow-hidden">
-          <img src={car.image.secure_url} alt={car.description} className="w-full h-14 object-cover aspect-square" />
+    <TableRow className="hover:bg-muted/40 transition-colors">
+      {/* Car */}
+      <TableCell className="py-3">
+        <div className="flex items-center gap-3">
+          <Avatar className="w-12 h-12 rounded-lg">
+            <AvatarImage src={car.image.secure_url} className="object-cover" />
+            <AvatarFallback className="rounded-lg bg-[#7C3AED]/10 text-[#7C3AED] text-xs">
+              {car.brand?.[0]}
+            </AvatarFallback>
+          </Avatar>
+          <div className="hidden md:block">
+            <p className="font-semibold text-sm">{car.brand} {car.model}</p>
+            <p className="text-xs text-muted-foreground">{car.seating_capacity} seats • {car.transmission}</p>
+          </div>
         </div>
-        <div className="max-md:hidden">
-          <p className="font-medium">{car.brand} {car.model}</p>
-          <p className="font-medium text-xs text-gray-500">{car.seating_capacity} • {car.transmission}</p>
-        </div>
-      </td>
-      <td className="px-4 py-3 max-md:hidden">
-        {car.category}
-      </td>
-      <td className="px-4 py-3">${car.price}/day</td>
-      <td className="px-4 py-3 max-md:hidden">
-        <span className={`${car.isAvailable ? "text-green-500 bg-green-100 " : "text-red-500 b-red-100"} rounded-full text-xs px-2 py-1`}>{car.isAvailable ? "Available" : "Unavailable"}</span>
-      </td>
-      <td className="px-4 py-3">
-        <button onClick={() => handleDeleteCar(car._id)}>
-          {isDeleting && <AiOutlineLoading3Quarters className="w-4 h-4 animate-spin" />}
-          {!isDeleting && <MdDelete className="w-5 h-5 cursor-pointer hover:text-red-500" />}
-        </button>
-      </td>
-    </tr>
+      </TableCell>
+
+      {/* Category */}
+      <TableCell className="hidden md:table-cell text-sm text-muted-foreground capitalize">{car.category}</TableCell>
+
+      {/* Price */}
+      <TableCell className="font-semibold text-[#7C3AED]">${car.price}<span className="text-muted-foreground font-normal text-xs">/day</span></TableCell>
+
+      {/* Status */}
+      <TableCell className="hidden md:table-cell">
+        <Badge
+          className={`text-xs font-semibold ${
+            car.isAvailable
+              ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
+              : "bg-red-100 text-red-700 hover:bg-red-100"
+          }`}
+        >
+          {car.isAvailable ? "Available" : "Unavailable"}
+        </Badge>
+      </TableCell>
+
+      {/* Actions */}
+      <TableCell>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger
+            render={
+              <button
+                className="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-red-50 hover:text-red-500 cursor-pointer transition-colors"
+                aria-label="Delete car"
+              />
+            }
+          >
+            <FiTrash2 className="w-4 h-4" />
+          </DialogTrigger>
+          <DialogContent className="rounded-2xl max-w-sm">
+            <DialogHeader>
+              <DialogTitle>Delete Car</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to delete <strong>{car.brand} {car.model}</strong>? This action cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="gap-2">
+              <Button variant="outline" onClick={() => setOpen(false)} className="rounded-xl cursor-pointer">Cancel</Button>
+              <Button
+                onClick={handleDeleteCar}
+                disabled={isDeleting}
+                className="bg-red-500 hover:bg-red-600 text-white rounded-xl cursor-pointer"
+              >
+                {isDeleting ? <AiOutlineLoading3Quarters className="animate-spin w-4 h-4" /> : "Delete"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </TableCell>
+    </TableRow>
   )
 }

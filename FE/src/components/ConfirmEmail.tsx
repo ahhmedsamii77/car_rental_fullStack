@@ -1,63 +1,110 @@
-import { MdErrorOutline, MdOutlineMail } from "react-icons/md";
-import { TbPassword } from "react-icons/tb";
-import { useConfirmEmail } from "../lib/queries";
-import type { ConfirmEmailType } from "../types";
-import toast from "react-hot-toast";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { ClipLoader } from "react-spinners";
-export default function ConfirmEmail({ setShowConfirmEmail, setShowLogin }: { setShowConfirmEmail: React.Dispatch<React.SetStateAction<boolean>>, setShowLogin: React.Dispatch<React.SetStateAction<boolean>> }) {
-  const { mutateAsync: confirmEmail } = useConfirmEmail();
-  const initialValues: ConfirmEmailType = { otp: "", email: "" };
+import { MdErrorOutline, MdOutlineMail } from "react-icons/md"
+import { TbPassword } from "react-icons/tb"
+import { useConfirmEmail } from "../lib/queries"
+import type { ConfirmEmailType } from "../types"
+import toast from "react-hot-toast"
+import { useFormik } from "formik"
+import * as yup from "yup"
+import { ClipLoader } from "react-spinners"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { FiMail } from "react-icons/fi"
+
+export default function ConfirmEmail({
+  setShowConfirmEmail,
+  setShowLogin,
+}: {
+  setShowConfirmEmail: React.Dispatch<React.SetStateAction<boolean>>
+  setShowLogin: React.Dispatch<React.SetStateAction<boolean>>
+}) {
+  const { mutateAsync: confirmEmail } = useConfirmEmail()
+
+  const initialValues: ConfirmEmailType = { otp: "", email: "" }
+
   async function onSubmit(values: ConfirmEmailType) {
     try {
-      const res = await confirmEmail(values);
-      setShowConfirmEmail(false);
-      setShowLogin(true);
-      console.log(res)
-      toast.success("email confirmed successfully");
-    } catch (error: any) {
-      toast.error(error.response.data.message);
+      await confirmEmail(values)
+      setShowConfirmEmail(false)
+      setShowLogin(true)
+      toast.success("Email confirmed! Please sign in.")
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } } }
+      toast.error(err?.response?.data?.message ?? "Confirmation failed")
     }
   }
-  const signinFormik = useFormik({
+
+  const formik = useFormik({
     initialValues,
     onSubmit,
     validationSchema: yup.object().shape({
-      email: yup.string().email("Email is invalid").required("Email is required"),
-      otp: yup.string().length(4, "OTP must be 4 digits").required("OTP is required"),
-    })
-  });
+      email: yup.string().email("Invalid email").required("Email is required"),
+      otp:   yup.string().length(4, "OTP must be 4 digits").required("OTP is required"),
+    }),
+  })
+
   return (
-    <form onSubmit={signinFormik.handleSubmit} className="bg-white text-gray-500 max-w-[340px] w-full mx-4 md:p-6 p-4 py-8 text-left text-sm rounded-lg shadow-[0px_0px_10px_0px] shadow-black/10">
-      <h2 className="text-2xl font-bold mb-9 text-center text-gray-800"><span className="text-primary">Confirm</span> Email</h2>
-      <div>
-        <div className="flex items-center my-2 border bg-indigo-500/5 border-gray-500/10 rounded gap-1 pl-2">
-          <MdOutlineMail className="w-4 h-4 text-gray-500/70" />
-          <input value={signinFormik.values.email} onChange={signinFormik.handleChange} onBlur={signinFormik.handleBlur} id="email" className="w-full outline-none bg-transparent py-2.5" type="email" placeholder="email" />
+    <form onSubmit={formik.handleSubmit} className="space-y-4 w-full">
+      {/* Illustration */}
+      <div className="flex justify-center mb-2">
+        <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center">
+          <FiMail className="w-8 h-8 text-white" />
         </div>
-        {signinFormik.touched.email && signinFormik.errors.email && <div className="flex items-center justify-between text-red-600 max-w-80 w-full bg-red-600/10 p-1.5 rounded shadow">
-          <div className="flex items-center gap-2">
-            <MdErrorOutline className="w-4 h-4" />
-            <p className="text-sm">{signinFormik?.errors.email}</p>
-          </div>
-        </div>}
       </div>
-      <div className="mb-8">
-        <div className="flex items-center my-2 border bg-indigo-500/5 border-gray-500/10 rounded gap-1 pl-2">
-          <TbPassword className="w-4 h-4 text-gray-500/70" />
-          <input value={signinFormik.values.otp} onChange={signinFormik.handleChange} onBlur={signinFormik.handleBlur} id="otp" className="w-full outline-none bg-transparent py-2.5" type="password" placeholder=".otp" />
+      <p className="text-sm text-muted-foreground text-center">Enter the 4-digit code sent to your email.</p>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="conf-email" className="text-sm font-medium">Email</Label>
+        <div className="relative">
+          <MdOutlineMail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            id="conf-email"
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className="pl-9 rounded-xl focus-visible:ring-[#7C3AED]"
+          />
         </div>
-        {signinFormik.touched.otp && signinFormik.errors.otp && <div className="flex items-center justify-between text-red-600 max-w-80 w-full bg-red-600/10 p-1.5 rounded shadow">
-          <div className="flex items-center gap-2">
-            <MdErrorOutline className="w-4 h-4" />
-            <p className="text-sm">{signinFormik?.errors.otp}</p>
-          </div>
-        </div>}
+        {formik.touched.email && formik.errors.email && (
+          <p className="flex items-center gap-1 text-destructive text-xs">
+            <MdErrorOutline className="w-3.5 h-3.5" /> {formik.errors.email}
+          </p>
+        )}
       </div>
-      <button type="submit" disabled={!signinFormik.isValid || !signinFormik.dirty} className={` w-full mb-3   transition-all active:scale-95 py-2 rounded text-white font-medium ${!signinFormik.isValid || !signinFormik.dirty ? "bg-blue-400 cursor-not-allowed" : "cursor-pointer bg-primary hover:bg-primary-dull"}`}>
-        {signinFormik.isSubmitting ? <ClipLoader color="#fff" size={20} /> : "send code"}
-      </button>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="otp" className="text-sm font-medium">OTP Code</Label>
+        <div className="relative">
+          <TbPassword className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            id="otp"
+            name="otp"
+            type="text"
+            maxLength={4}
+            placeholder="1234"
+            value={formik.values.otp}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className="pl-9 rounded-xl tracking-widest text-center font-bold text-lg focus-visible:ring-[#7C3AED]"
+          />
+        </div>
+        {formik.touched.otp && formik.errors.otp && (
+          <p className="flex items-center gap-1 text-destructive text-xs">
+            <MdErrorOutline className="w-3.5 h-3.5" /> {formik.errors.otp}
+          </p>
+        )}
+      </div>
+
+      <Button
+        type="submit"
+        disabled={!formik.isValid || !formik.dirty}
+        className="w-full gradient-primary text-white rounded-xl h-10 font-semibold hover:opacity-90 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {formik.isSubmitting ? <ClipLoader color="#fff" size={18} /> : "Verify Email"}
+      </Button>
     </form>
   )
 }

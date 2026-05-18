@@ -9,7 +9,7 @@ export const carRouter = Router();
 carRouter.post("/addCar", authentication, authorization([userRoles.admin]), Multer(customExtensions.image).single("image"), validation(CV.addCarSchema), CS.addCar);
 
 // list cars
-carRouter.get("/listCars", authorization([userRoles.admin]), CS.listCars);
+carRouter.get("/listCars", authentication, authorization([userRoles.admin]), CS.listCars);
 
 // toggle availability
 carRouter.patch("/toggleAvailability/:carId", authentication, authorization([userRoles.admin]), validation(CV.toggleAvailabilitySchema), CS.toggleAvailability);
