@@ -34,7 +34,6 @@ export default function ManageBookingsData({ booking }: { booking: BookingResTyp
       : "bg-amber-100 text-amber-700 hover:bg-amber-100"
 
   return (
-    <>
     <tr className="group border-b border-border last:border-0 transition-colors">
       {/* Car */}
       <td className="px-4 py-3 group-hover:bg-[#7C3AED]/5 transition-colors">
@@ -83,6 +82,5 @@ export default function ManageBookingsData({ booking }: { booking: BookingResTyp
         )}
       </td>
     </tr>
-    </>
   )
 }

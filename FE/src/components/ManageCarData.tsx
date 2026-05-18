@@ -12,7 +12,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { AiOutlineLoading3Quarters } from "react-icons/ai"
 import { FiTrash2 } from "react-icons/fi"
@@ -35,7 +34,6 @@ export default function ManageCarData({ car }: { car: CarResType }) {
   }
 
   return (
-    <>
     <tr className="group border-b border-border last:border-0 transition-colors">
       {/* Car */}
       <td className="px-4 py-3 group-hover:bg-[#7C3AED]/5 transition-colors">
@@ -76,17 +74,15 @@ export default function ManageCarData({ car }: { car: CarResType }) {
 
       {/* Actions */}
       <td className="px-4 py-3 text-right group-hover:bg-[#7C3AED]/5 transition-colors">
+        <button
+          onClick={() => setOpen(true)}
+          className="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-red-50 hover:text-red-500 cursor-pointer transition-colors"
+          aria-label="Delete car"
+        >
+          <FiTrash2 className="w-4 h-4" />
+        </button>
+
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger
-            render={
-              <button
-                className="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-red-50 hover:text-red-500 cursor-pointer transition-colors"
-                aria-label="Delete car"
-              >
-                <FiTrash2 className="w-4 h-4" />
-              </button>
-            }
-          />
           <DialogContent className="rounded-2xl max-w-sm">
             <DialogHeader>
               <DialogTitle>Delete Car</DialogTitle>
@@ -108,6 +104,5 @@ export default function ManageCarData({ car }: { car: CarResType }) {
         </Dialog>
       </td>
     </tr>
-    </>
   )
 }
