@@ -190,13 +190,26 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <Separator />
-            <CardContent className="pt-1 pb-2">
-              <ul>
-                {d.bookings.length === 0
-                  ? <li className="py-12 text-center text-muted-foreground text-sm">No bookings yet</li>
-                  : d.bookings.slice(0, 6).map(b => <RecentBooking key={b._id} booking={b} />)
-                }
-              </ul>
+            <CardContent className="p-0 overflow-x-auto">
+              <table className="w-full text-sm border-collapse border-spacing-0">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="bg-muted text-left font-semibold text-foreground px-4 py-3">Vehicle</th>
+                    <th className="bg-muted text-left font-semibold text-foreground px-4 py-3 hidden md:table-cell">Dates</th>
+                    <th className="bg-muted text-left font-semibold text-foreground px-4 py-3">Price</th>
+                    <th className="bg-muted text-left font-semibold text-foreground px-4 py-3">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {d.bookings.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="text-center py-12 text-muted-foreground text-sm">No bookings yet</td>
+                    </tr>
+                  ) : (
+                    d.bookings.slice(0, 6).map(b => <RecentBooking key={b._id} booking={b} />)
+                  )}
+                </tbody>
+              </table>
             </CardContent>
           </Card>
         </motion.div>

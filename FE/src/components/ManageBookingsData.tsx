@@ -34,9 +34,10 @@ export default function ManageBookingsData({ booking }: { booking: BookingResTyp
       : "bg-amber-100 text-amber-700 hover:bg-amber-100"
 
   return (
-    <tr className="border-b border-border last:border-0 hover:bg-[#7C3AED]/5 transition-colors">
+  return (
+    <tr className="group border-b border-border last:border-0 transition-colors">
       {/* Car */}
-      <td className="px-4 py-3">
+      <td className="px-4 py-3 group-hover:bg-[#7C3AED]/5 transition-colors">
         <div className="flex items-center gap-3">
           <Avatar className="w-12 h-12 rounded-lg shrink-0">
             <AvatarImage src={booking.carId.image.secure_url} className="object-cover" />
@@ -52,20 +53,20 @@ export default function ManageBookingsData({ booking }: { booking: BookingResTyp
       </td>
 
       {/* Dates */}
-      <td className="px-4 py-3 hidden md:table-cell text-sm text-muted-foreground">
+      <td className="px-4 py-3 hidden md:table-cell text-sm text-muted-foreground group-hover:bg-[#7C3AED]/5 transition-colors">
         {new Date(booking.pickupDate).toLocaleDateString()} → {new Date(booking.returnDate).toLocaleDateString()}
       </td>
 
       {/* Price */}
-      <td className="px-4 py-3 font-semibold text-[#7C3AED]">${booking.price}</td>
+      <td className="px-4 py-3 font-semibold text-[#7C3AED] group-hover:bg-[#7C3AED]/5 transition-colors">${booking.price}</td>
 
       {/* Payment */}
-      <td className="px-4 py-3 hidden md:table-cell">
+      <td className="px-4 py-3 hidden md:table-cell group-hover:bg-[#7C3AED]/5 transition-colors">
         <Badge variant="outline" className="text-xs">Offline</Badge>
       </td>
 
       {/* Status */}
-      <td className="px-4 py-3">
+      <td className="px-4 py-3 group-hover:bg-[#7C3AED]/5 transition-colors">
         {status === "pending" ? (
           <Select value={status} onValueChange={(val) => { if (val) handleChangeStatus(val) }}>
             <SelectTrigger className="w-32 h-8 rounded-xl text-xs border-border/60 focus:ring-[#7C3AED]">

@@ -35,9 +35,10 @@ export default function ManageCarData({ car }: { car: CarResType }) {
   }
 
   return (
-    <tr className="border-b border-border last:border-0 hover:bg-[#7C3AED]/5 transition-colors">
+  return (
+    <tr className="group border-b border-border last:border-0 transition-colors">
       {/* Car */}
-      <td className="px-4 py-3">
+      <td className="px-4 py-3 group-hover:bg-[#7C3AED]/5 transition-colors">
         <div className="flex items-center gap-3">
           <Avatar className="w-12 h-12 rounded-lg shrink-0">
             <AvatarImage src={car.image.secure_url} className="object-cover" />
@@ -53,15 +54,15 @@ export default function ManageCarData({ car }: { car: CarResType }) {
       </td>
 
       {/* Category */}
-      <td className="px-4 py-3 hidden md:table-cell text-sm text-muted-foreground capitalize">{car.category}</td>
+      <td className="px-4 py-3 hidden md:table-cell text-sm text-muted-foreground capitalize group-hover:bg-[#7C3AED]/5 transition-colors">{car.category}</td>
 
       {/* Price */}
-      <td className="px-4 py-3 font-semibold text-[#7C3AED]">
+      <td className="px-4 py-3 font-semibold text-[#7C3AED] group-hover:bg-[#7C3AED]/5 transition-colors">
         ${car.price}<span className="text-muted-foreground font-normal text-xs">/day</span>
       </td>
 
       {/* Status */}
-      <td className="px-4 py-3 hidden md:table-cell">
+      <td className="px-4 py-3 hidden md:table-cell group-hover:bg-[#7C3AED]/5 transition-colors">
         <Badge
           className={`text-xs font-semibold ${
             car.isAvailable
@@ -74,7 +75,7 @@ export default function ManageCarData({ car }: { car: CarResType }) {
       </td>
 
       {/* Actions */}
-      <td className="px-4 py-3 text-right">
+      <td className="px-4 py-3 text-right group-hover:bg-[#7C3AED]/5 transition-colors">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger
             render={
