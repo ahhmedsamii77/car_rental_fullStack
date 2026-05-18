@@ -133,7 +133,7 @@ export function useDeleteCar() {
 export function useGetDashboardData() {
   const token = localStorage.getItem("access_token");
   const { data: userInfo } = useGetUserInfo();
-  const isAdmin = userInfo?.data?.data?.role === "admin";
+  const isAdmin = userInfo?.data?.user?.role === "admin";
   return useQuery({
     queryKey: ["dashboardData"],
     queryFn: getDashboardData,

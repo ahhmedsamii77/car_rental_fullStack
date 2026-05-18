@@ -19,7 +19,7 @@ export default function AppGuard({ children }: { children: JSX.Element }) {
 
   // Fetch role from API only — no localStorage fallback
   const { data: userInfo, isLoading } = useGetUserInfo();
-  const role = userInfo?.data?.data?.role;
+  const role = userInfo?.data?.user?.role;
 
   // While the API call is in-flight, don't redirect (avoids false block on refresh)
   if (pathname.startsWith("/dashboard") && !isLoading && role !== "admin") {

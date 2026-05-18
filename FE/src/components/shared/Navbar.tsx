@@ -28,7 +28,7 @@ export default function Navbar() {
   const { data: userInfo } = useGetUserInfo()
   const navigate = useNavigate()
 
-  const isAdmin = userInfo?.data?.data?.role === "admin"
+  const isAdmin = userInfo?.data?.user?.role === "admin"
 
   async function handleLogout() {
     try {

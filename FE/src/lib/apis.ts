@@ -7,8 +7,8 @@ const baseURL = import.meta.env.VITE_BASE_URL as string;
 
 /** Read role from React Query cache; fall back to localStorage */
 function getRole(): string {
-  const cached = queryClient.getQueryData<{ data: { data: { role: string } } }>(["userInfo"]);
-  return cached?.data?.data?.role ?? localStorage.getItem("role") ?? "user";
+  const cached = queryClient.getQueryData<{ data: { user: { role: string } } }>(["userInfo"]);
+  return cached?.data?.user?.role ?? localStorage.getItem("role") ?? "user";
 }
 
 export function getPrefix(role?: string): string {
