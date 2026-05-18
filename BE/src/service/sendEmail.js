@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 export async function sendEmail({ to, subject, html }) {
-  const transporter = nodemailer.createTransport({
+ try {
+   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
       user: process.env.EMAIL,
@@ -13,8 +14,10 @@ export async function sendEmail({ to, subject, html }) {
     subject: subject || "Hello",
     html: html || "<h1>hello</h1>",
   });
-  if (info.accepted.length == 0) {
-    return false;
-  }
-  return true;
+    return info.accepted.length > 0;
+
+ } catch (error) {
+  console.log(error.message)
+  return false;
+ }
 }
