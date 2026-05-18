@@ -67,13 +67,13 @@ export default function ManageBookingsData({ booking }: { booking: BookingResTyp
       <div className="shrink-0">
         {status === "pending" ? (
           <Select value={status} onValueChange={(val) => { if (val) handleChangeStatus(val) }}>
-            <SelectTrigger className="w-28 h-7 rounded-xl text-[11px] border-border/60 focus:ring-[#7C3AED]">
+            <SelectTrigger className="w-28 h-7 rounded-xl text-[11px] border-border/60 focus:ring-[#7C3AED] cursor-pointer">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="confirmed">Confirmed</SelectItem>
-              <SelectItem value="cancelled">Cancelled</SelectItem>
+              <SelectItem value="pending" className="cursor-pointer">Pending</SelectItem>
+              <SelectItem value="confirmed" className="cursor-pointer">Confirmed</SelectItem>
+              <SelectItem value="cancelled" className="cursor-pointer">Cancelled</SelectItem>
             </SelectContent>
           </Select>
         ) : (
