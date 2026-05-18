@@ -15,6 +15,9 @@ export async function authentication(req, res, next) {
   } else {
     throw new Error("invalid prefix", { cause: 401 });
   }
+  if (!signature) {
+    throw new Error("server misconfiguration: missing JWT secret", { cause: 500 });
+  }
   const decoded = await verifyToken({ token, signature });
   const isRevoked = await revokeTokenModel.findOne({ idToken: decoded.jti });
   if (isRevoked) {

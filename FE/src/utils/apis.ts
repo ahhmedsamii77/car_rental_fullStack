@@ -122,10 +122,11 @@ export function refershToken() {
 
 export function getUserInfo() {
   const baseUrl = import.meta.env.VITE_BASE_URL;
-  const token = localStorage.getItem("access_token");
+  const token  = localStorage.getItem("access_token");
+  const prefix = localStorage.getItem("role") === "user" ? "Bearer" : "Admin";
   return axios.get(`${baseUrl}/users/userInfo`, {
     headers: {
-      authorization: token ? `Admin ${token}` : "",
+      authorization: token ? `${prefix} ${token}` : "",
     },
   });
 }
