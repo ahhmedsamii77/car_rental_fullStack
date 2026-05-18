@@ -13,57 +13,41 @@ import NotFound from "./Pages/NotFound";
 import CarDetails from "./Pages/CarDetails";
 import Cars from "./Pages/Cars";
 import MyBookings from "./Pages/MyBookings";
-import { ProtectedRoute } from "./components/shared/ProtectedRoute";
+import { ProtectedRoute, AdminRoute } from "./components/shared/ProtectedRoute";
+
 const router = createBrowserRouter([
   {
-    path: '', element: <Layout />, children: [
-      { index: true, element: <Home /> },
-      { path: "/home", element: <Home /> },
-      {
-        path: "/myBookings", loader: ProtectedRoute,
-        element: <MyBookings />
+    path: "", element: <Layout />, children: [
+      // ─── Public pages ───────────────────────────────────
+      { index: true,                element: <Home /> },
+      { path: "/home",              element: <Home /> },
+      { path: "/cars",              element: <Cars /> },
+      { path: "/carDetails/:carId", element: <CarDetails /> },
 
-      },
-      {
-        path: "/carDetails/:carId", loader: ProtectedRoute, element:
-          <CarDetails />
+      // ─── Auth required ──────────────────────────────────
+      { path: "/myBookings", loader: ProtectedRoute, element: <MyBookings /> },
 
-      },
-      {
-        path: "/cars", loader: ProtectedRoute, element:
-          <Cars />
-      },
+      // ─── Admin required ──────────────────────────────────
       {
         path: "/dashboard", element: <AdminLayout />, children: [
-          {
-            index: true, loader: ProtectedRoute, element:
-              <Dashboard />
-          },
-          {
-            path: "addCar", loader: ProtectedRoute, element:
-              <AddCar />
-          },
-          {
-            path: "manageCars", loader: ProtectedRoute, element:
-              <ManageCars />
-          },
-          {
-            path: "manageBookings", loader: ProtectedRoute, element:
-              <ManageBookings />
-          },
+          { index: true,             loader: AdminRoute, element: <Dashboard /> },
+          { path: "addCar",          loader: AdminRoute, element: <AddCar /> },
+          { path: "manageCars",      loader: AdminRoute, element: <ManageCars /> },
+          { path: "manageBookings",  loader: AdminRoute, element: <ManageBookings /> },
         ]
       },
-      {
-        path: "*", element: <NotFound />
-      }
+
+      { path: "*", element: <NotFound /> },
     ]
   }
 ]);
-const clinet = new QueryClient();
+
+const client = new QueryClient();
+
 export default function App() {
   return (
     <>
-      <QueryClientProvider client={clinet}>
+      <QueryClientProvider client={client}>
         <AuthContextProvider>
           <RouterProvider router={router} />
         </AuthContextProvider>

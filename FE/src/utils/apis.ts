@@ -216,11 +216,5 @@ export function changeBookingStatus({
 
 export function getAvailableCars(carData: AvailableCarType) {
   const baseUrl = import.meta.env.VITE_BASE_URL;
-  const token = localStorage.getItem("access_token");
-  const prefix = localStorage.getItem("role") == "user" ? "Bearer" : "Admin";
-  return axios.post(`${baseUrl}/booking`, carData, {
-    headers: {
-      authorization: token ? `${prefix} ${token}` : "",
-    },
-  });
+  return axios.post(`${baseUrl}/booking`, carData);
 }

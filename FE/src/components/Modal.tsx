@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useContext, useEffect } from "react"
 import Signin from "./Signin"
 import Signup from "./Signup"
 import ConfirmEmail from "./ConfirmEmail"
@@ -12,6 +12,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { authContext } from "../context/authContext"
 
 export default function Modal({
   setShowModal,
@@ -20,41 +21,64 @@ export default function Modal({
 }) {
   const [showConfirmEmail, setShowConfirmEmail] = useState(false)
   const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin")
+  const { accessToken } = useContext(authContext)!
+
+  // Auto-close when the user successfully logs in
+  useEffect(() => {
+    if (accessToken) setShowModal(false)
+  }, [accessToken])
 
   return (
     <Dialog open onOpenChange={(o) => !o && setShowModal(false)}>
-      <DialogContent className="sm:max-w-md p-0 overflow-hidden rounded-2xl border-border/60 shadow-violet-lg">
+      <DialogContent
+        className="sm:max-w-md p-0 overflow-hidden rounded-2xl border-0 shadow-2xl"
+        showCloseButton={false}
+      >
         {/* Gradient header */}
-        <div className="gradient-primary px-6 pt-7 pb-5 text-white">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center">
+        <div className="bg-gradient-to-br from-[#7C3AED] to-[#06B6D4] px-6 pt-7 pb-6 text-white relative">
+          {/* Close button */}
+          <button
+            onClick={() => setShowModal(false)}
+            className="absolute top-4 right-4 w-8 h-8 rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center transition cursor-pointer text-white"
+            aria-label="Close"
+          >
+            ✕
+          </button>
+
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
               <FaCar className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-lg font-[family-name:var(--font-display)]">DriveEase</span>
+            <span className="font-bold text-xl font-[family-name:var(--font-display)]">DriveEase</span>
           </div>
+
           <DialogHeader>
-            <DialogTitle className="text-white text-2xl font-[family-name:var(--font-display)]">
-              {showConfirmEmail ? "Verify Email" : activeTab === "signin" ? "Welcome Back" : "Create Account"}
+            <DialogTitle className="text-white text-2xl font-[family-name:var(--font-display)] leading-tight">
+              {showConfirmEmail
+                ? "Verify Email"
+                : activeTab === "signin"
+                ? "Welcome Back 👋"
+                : "Create Account"}
             </DialogTitle>
-            <DialogDescription className="text-white/70 text-sm mt-1">
+            <DialogDescription className="text-white/75 text-sm mt-1">
               {showConfirmEmail
                 ? "Enter the 4-digit OTP sent to your inbox."
                 : activeTab === "signin"
-                ? "Sign in to your DriveEase account"
-                : "Join thousands of happy renters"}
+                ? "Sign in to continue your journey with DriveEase"
+                : "Join thousands of happy renters today"}
             </DialogDescription>
           </DialogHeader>
         </div>
 
         {/* Body */}
-        <div className="px-6 pb-6 pt-5">
+        <div className="px-6 pb-7 pt-6 bg-background">
           <AnimatePresence mode="wait">
             {showConfirmEmail ? (
               <motion.div
                 key="confirm"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.2 }}
               >
                 <ConfirmEmail
@@ -65,9 +89,9 @@ export default function Modal({
             ) : (
               <motion.div
                 key="auth"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.2 }}
               >
                 <Tabs
@@ -75,14 +99,26 @@ export default function Modal({
                   onValueChange={(v) => setActiveTab(v as "signin" | "signup")}
                   className="w-full"
                 >
-                  <TabsList className="w-full mb-5 rounded-xl bg-muted h-10">
-                    <TabsTrigger value="signin" className="flex-1 rounded-lg text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-[#7C3AED] data-[state=active]:shadow-sm cursor-pointer">
+                  {/* Tab switcher — use data-active: for @base-ui/react */}
+                  <TabsList className="w-full mb-6 rounded-xl bg-muted h-11 p-1">
+                    <TabsTrigger
+                      value="signin"
+                      className="flex-1 rounded-lg text-sm font-semibold cursor-pointer
+                        data-active:bg-white data-active:text-[#7C3AED] data-active:shadow-sm
+                        text-muted-foreground hover:text-foreground transition-all"
+                    >
                       Sign In
                     </TabsTrigger>
-                    <TabsTrigger value="signup" className="flex-1 rounded-lg text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-[#7C3AED] data-[state=active]:shadow-sm cursor-pointer">
+                    <TabsTrigger
+                      value="signup"
+                      className="flex-1 rounded-lg text-sm font-semibold cursor-pointer
+                        data-active:bg-white data-active:text-[#7C3AED] data-active:shadow-sm
+                        text-muted-foreground hover:text-foreground transition-all"
+                    >
                       Sign Up
                     </TabsTrigger>
                   </TabsList>
+
                   <TabsContent value="signin">
                     <Signin setShowLogin={(v) => setActiveTab(v ? "signin" : "signup")} />
                   </TabsContent>

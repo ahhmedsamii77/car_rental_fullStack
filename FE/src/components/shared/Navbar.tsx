@@ -7,29 +7,27 @@ import { FiLogOut, FiLogIn } from "react-icons/fi"
 import { FaCar } from "react-icons/fa6"
 import Modal from "../Modal"
 import { authContext } from "../../context/authContext"
-import { useGetCars, useLogout } from "../../lib/queries"
+import { useLogout } from "../../lib/queries"
 import toast from "react-hot-toast"
-import useDebounce from "../../utils/hooks/useDebounce"
 import { motion, AnimatePresence } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 const navLinks = [
-  { name: "Home",        path: "/" },
-  { name: "Cars",        path: "/cars" },
-  { name: "My Bookings", path: "/myBookings" },
-  { name: "Dashboard",   path: "/dashboard" },
+  { name: "Home",        path: "/",           public: true },
+  { name: "Cars",        path: "/cars",       public: true },
+  { name: "My Bookings", path: "/myBookings", public: false },
+  { name: "Dashboard",   path: "/dashboard",  public: false, adminOnly: true },
 ]
 
 export default function Navbar() {
   const [open, setOpen]           = useState(false)
   const [showModal, setShowModal] = useState(false)
-  const { accessToken, setAccessToken } = useContext(authContext)!
-  const { mutateAsync: logout }         = useLogout()
-  const { query, setQuery }             = useContext(authContext)!
-  const debounceValue = useDebounce({ value: query, delay: 500 })
-  useGetCars({ limit: 500, query: debounceValue })
+  const { accessToken, setAccessToken, query, setQuery } = useContext(authContext)!
+  const { mutateAsync: logout } = useLogout()
   const navigate = useNavigate()
+
+  const isAdmin = localStorage.getItem("role") === "admin"
 
   async function handleLogout() {
     try {
@@ -39,13 +37,17 @@ export default function Navbar() {
       localStorage.removeItem("refersh_token")
       localStorage.removeItem("role")
       toast.success("Logged out successfully")
-    } catch (error: unknown) {
-      const err = error as { response?: { data?: { message?: string } } }
-      toast.error(err?.response?.data?.message ?? "Logout failed")
+    } catch {
+      toast.error("Logout failed")
     }
   }
 
-  const isAdmin = localStorage.getItem("role") === "admin"
+  // Filter links based on auth state
+  const visibleLinks = navLinks.filter((link) => {
+    if (link.adminOnly) return isAdmin
+    if (!link.public) return !!accessToken
+    return true
+  })
 
   return (
     <>
@@ -68,13 +70,11 @@ export default function Navbar() {
 
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-6">
-            {navLinks.map((link) =>
-              link.name === "Dashboard" && !isAdmin ? null : (
-                <NavLink key={link.name} className="nav-link text-sm font-medium text-foreground/80" to={link.path}>
-                  {link.name}
-                </NavLink>
-              )
-            )}
+            {visibleLinks.map((link) => (
+              <NavLink key={link.name} className="nav-link text-sm font-medium text-foreground/80" to={link.path} end={link.path === "/"}>
+                {link.name}
+              </NavLink>
+            ))}
           </div>
 
           {/* Desktop search + auth */}
@@ -116,23 +116,22 @@ export default function Navbar() {
               className="md:hidden overflow-hidden border-t border-border/60 bg-background"
             >
               <div className="px-5 py-4 flex flex-col gap-3">
-                {navLinks.map((link) =>
-                  link.name === "Dashboard" && !isAdmin ? null : (
-                    <NavLink
-                      key={link.name}
-                      to={link.path}
-                      onClick={() => setOpen(false)}
-                      className="nav-link text-sm font-medium w-fit"
-                    >
-                      {link.name}
-                    </NavLink>
-                  )
-                )}
+                {visibleLinks.map((link) => (
+                  <NavLink
+                    key={link.name}
+                    to={link.path}
+                    end={link.path === "/"}
+                    onClick={() => setOpen(false)}
+                    className="nav-link text-sm font-medium w-fit"
+                  >
+                    {link.name}
+                  </NavLink>
+                ))}
                 <div className="relative mt-1">
                   <CiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     value={query}
-                    onChange={(e) => { navigate("/cars"); setQuery(e.target.value) }}
+                    onChange={(e) => { navigate("/cars"); setQuery(e.target.value); setOpen(false) }}
                     className="pl-9 rounded-full bg-muted/60"
                     placeholder="Search cars…"
                   />

@@ -8,8 +8,8 @@ import { userRoles } from "../../DB/index.js";
 export const bookingRouter = Router();
 
 
-// get avlability of car by given date
-bookingRouter.post("/", authentication, validation(TV.getAvailableCarsSchema), TS.getAvailableCars);
+// get availability of car by given date (public - no auth needed)
+bookingRouter.post("/", validation(TV.getAvailableCarsSchema), TS.getAvailableCars);
 
 // create booking
 bookingRouter.post("/create", authentication, validation(TV.createBookingSchema), TS.createBooking);

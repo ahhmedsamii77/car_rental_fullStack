@@ -91,9 +91,12 @@ export function useAddCar() {
 }
 
 export function useGetDashboardData() {
+  const token = localStorage.getItem("access_token");
+  const isAdmin = localStorage.getItem("role") === "admin";
   return useQuery({
     queryKey: ["dashboardData"],
     queryFn: getDashboardData,
+    enabled: !!token && isAdmin,
   });
 }
 
@@ -104,9 +107,11 @@ export function useRefershToken() {
 }
 
 export function useGetUserInfo() {
+  const token = localStorage.getItem("access_token");
   return useQuery({
     queryKey: ["userInfo"],
     queryFn: getUserInfo,
+    enabled: !!token,
   });
 }
 
@@ -163,9 +168,11 @@ export function useCreateBooking() {
 }
 
 export function useGetUserBookings() {
+  const token = localStorage.getItem("access_token");
   return useQuery({
     queryKey: ["userBookings"],
     queryFn: getUserBookings,
+    enabled: !!token,
   });
 }
 
