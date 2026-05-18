@@ -11,8 +11,15 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from "@/components/ui/tabs"
 import { authContext } from "../context/authContext"
+
+type Tab = "signin" | "signup"
 
 export default function Modal({
   setShowModal,
@@ -20,10 +27,10 @@ export default function Modal({
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const [showConfirmEmail, setShowConfirmEmail] = useState(false)
-  const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin")
+  const [activeTab, setActiveTab] = useState<Tab>("signin")
   const { accessToken } = useContext(authContext)!
 
-  // Auto-close when the user successfully logs in
+  // Auto-close when user logs in successfully
   useEffect(() => {
     if (accessToken) setShowModal(false)
   }, [accessToken])
@@ -34,12 +41,11 @@ export default function Modal({
         className="sm:max-w-md p-0 overflow-hidden rounded-2xl border-0 shadow-2xl"
         showCloseButton={false}
       >
-        {/* Gradient header */}
-        <div className="bg-gradient-to-br from-[#7C3AED] to-[#06B6D4] px-6 pt-7 pb-6 text-white relative">
-          {/* Close button */}
+        {/* ── Gradient header ── */}
+        <div className="bg-gradient-to-br from-[#7C3AED] via-[#6366F1] to-[#06B6D4] px-6 pt-7 pb-6 text-white relative">
           <button
             onClick={() => setShowModal(false)}
-            className="absolute top-4 right-4 w-8 h-8 rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center transition cursor-pointer text-white"
+            className="absolute top-4 right-4 w-8 h-8 rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all cursor-pointer text-white font-medium text-base leading-none"
             aria-label="Close"
           >
             ✕
@@ -53,25 +59,25 @@ export default function Modal({
           </div>
 
           <DialogHeader>
-            <DialogTitle className="text-white text-2xl font-[family-name:var(--font-display)] leading-tight">
+            <DialogTitle className="text-white text-2xl font-[family-name:var(--font-display)]">
               {showConfirmEmail
-                ? "Verify Email"
+                ? "Verify Your Email"
                 : activeTab === "signin"
                 ? "Welcome Back 👋"
                 : "Create Account"}
             </DialogTitle>
             <DialogDescription className="text-white/75 text-sm mt-1">
               {showConfirmEmail
-                ? "Enter the 4-digit OTP sent to your inbox."
+                ? "Enter the 4-digit code sent to your inbox."
                 : activeTab === "signin"
-                ? "Sign in to continue your journey with DriveEase"
+                ? "Sign in to continue your DriveEase journey"
                 : "Join thousands of happy renters today"}
             </DialogDescription>
           </DialogHeader>
         </div>
 
-        {/* Body */}
-        <div className="px-6 pb-7 pt-6 bg-background">
+        {/* ── Body ── */}
+        <div className="px-6 pb-7 pt-5 bg-background">
           <AnimatePresence mode="wait">
             {showConfirmEmail ? (
               <motion.div
@@ -88,7 +94,7 @@ export default function Modal({
               </motion.div>
             ) : (
               <motion.div
-                key="auth"
+                key="auth-tabs"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
@@ -96,24 +102,24 @@ export default function Modal({
               >
                 <Tabs
                   value={activeTab}
-                  onValueChange={(v) => setActiveTab(v as "signin" | "signup")}
+                  onValueChange={(v) => v && setActiveTab(v as Tab)}
                   className="w-full"
                 >
-                  {/* Tab switcher — use data-active: for @base-ui/react */}
-                  <TabsList className="w-full mb-6 rounded-xl bg-muted h-11 p-1">
+                  {/* Tab switcher */}
+                  <TabsList className="w-full mb-5 h-11 rounded-xl bg-muted p-1">
                     <TabsTrigger
                       value="signin"
-                      className="flex-1 rounded-lg text-sm font-semibold cursor-pointer
-                        data-active:bg-white data-active:text-[#7C3AED] data-active:shadow-sm
-                        text-muted-foreground hover:text-foreground transition-all"
+                      className="flex-1 h-full rounded-lg text-sm font-semibold cursor-pointer transition-all
+                        text-muted-foreground hover:text-foreground
+                        data-active:bg-white data-active:text-[#7C3AED] data-active:shadow-sm"
                     >
                       Sign In
                     </TabsTrigger>
                     <TabsTrigger
                       value="signup"
-                      className="flex-1 rounded-lg text-sm font-semibold cursor-pointer
-                        data-active:bg-white data-active:text-[#7C3AED] data-active:shadow-sm
-                        text-muted-foreground hover:text-foreground transition-all"
+                      className="flex-1 h-full rounded-lg text-sm font-semibold cursor-pointer transition-all
+                        text-muted-foreground hover:text-foreground
+                        data-active:bg-white data-active:text-[#7C3AED] data-active:shadow-sm"
                     >
                       Sign Up
                     </TabsTrigger>
@@ -122,6 +128,7 @@ export default function Modal({
                   <TabsContent value="signin">
                     <Signin setShowLogin={(v) => setActiveTab(v ? "signin" : "signup")} />
                   </TabsContent>
+
                   <TabsContent value="signup">
                     <Signup
                       setShowLogin={(v) => setActiveTab(v ? "signin" : "signup")}
