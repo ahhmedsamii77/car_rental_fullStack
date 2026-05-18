@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"
 import { useContext, useState } from "react"
 import { authContext } from "../context/authContext"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -91,13 +92,13 @@ export default function BookingForm({ car }: { car: CarResType }) {
               <Label htmlFor="pickupDate" className="text-sm font-medium flex items-center gap-1.5">
                 <FiCalendar className="w-3.5 h-3.5 text-[#7C3AED]" /> Pickup Date
               </Label>
-              <input
+              <Input
                 type="date"
                 id="pickupDate"
                 value={formik.values.pickupDate}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="w-full rounded-xl border border-border px-3 py-2.5 text-sm bg-muted/30 focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/40 transition"
+                className="rounded-xl focus-visible:ring-[#7C3AED]"
               />
               {formik.touched.pickupDate && formik.errors.pickupDate && (
                 <p className="text-destructive text-xs">{formik.errors.pickupDate}</p>
@@ -109,13 +110,13 @@ export default function BookingForm({ car }: { car: CarResType }) {
               <Label htmlFor="returnDate" className="text-sm font-medium flex items-center gap-1.5">
                 <FiCalendar className="w-3.5 h-3.5 text-[#06B6D4]" /> Return Date
               </Label>
-              <input
+              <Input
                 type="date"
                 id="returnDate"
                 value={formik.values.returnDate}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="w-full rounded-xl border border-border px-3 py-2.5 text-sm bg-muted/30 focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/40 transition"
+                className="rounded-xl focus-visible:ring-[#7C3AED]"
               />
               {formik.touched.returnDate && formik.errors.returnDate && (
                 <p className="text-destructive text-xs">{formik.errors.returnDate}</p>

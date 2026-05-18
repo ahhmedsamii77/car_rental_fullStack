@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom"
 import * as yup from "yup"
 import { motion } from "motion/react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { FaMapMarkerAlt, FaCalendarAlt } from "react-icons/fa"
 import {
   Select,
@@ -44,9 +46,9 @@ export default function BookingInput() {
 
         {/* Location */}
         <div className="flex-1 min-w-0">
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
+          <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
             <FaMapMarkerAlt className="text-[#7C3AED]" /> Location
-          </label>
+          </Label>
           <Select
             value={formik.values.location}
             onValueChange={(val) => formik.setFieldValue("location", val)}
@@ -65,29 +67,29 @@ export default function BookingInput() {
 
         {/* Pickup */}
         <div className="flex-1 min-w-0">
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
+          <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
             <FaCalendarAlt className="text-[#F59E0B]" /> Pickup Date
-          </label>
-          <input
+          </Label>
+          <Input
             type="date"
             id="pickupDate"
             value={formik.values.pickupDate}
             onChange={formik.handleChange}
-            className="w-full rounded-xl border border-border bg-muted/40 px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/50"
+            className="rounded-xl focus-visible:ring-[#7C3AED]"
           />
         </div>
 
         {/* Return */}
         <div className="flex-1 min-w-0">
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
+          <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
             <FaCalendarAlt className="text-[#06B6D4]" /> Return Date
-          </label>
-          <input
+          </Label>
+          <Input
             type="date"
             id="returnDate"
             value={formik.values.returnDate}
             onChange={formik.handleChange}
-            className="w-full rounded-xl border border-border bg-muted/40 px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/50"
+            className="rounded-xl focus-visible:ring-[#7C3AED]"
           />
         </div>
 
