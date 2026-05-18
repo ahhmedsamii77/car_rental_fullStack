@@ -1,4 +1,3 @@
-import { useState } from "react"
 import Title from "../components/shared/Title"
 import { MdDone, MdOutlineCloudUpload } from "react-icons/md"
 import { useFormik } from "formik"
@@ -23,65 +22,6 @@ import { Separator } from "@/components/ui/separator"
 
 export default function AddCar() {
   const { mutateAsync: addCar } = useAddCar()
-  const [isSeeding, setIsSeeding] = useState(false)
-  const [seedProgress, setSeedProgress] = useState(0)
-
-  async function handleSeedCars() {
-    setIsSeeding(true)
-    setSeedProgress(0)
-    const carsData = [
-      { brand: "BMW", model: "M4", price: 150, cat: "coupe" },
-      { brand: "Mercedes", model: "S-Class", price: 200, cat: "sedan" },
-      { brand: "Audi", model: "R8", price: 250, cat: "coupe" },
-      { brand: "Tesla", model: "Model S", price: 120, cat: "sedan" },
-      { brand: "Porsche", model: "911", price: 300, cat: "coupe" },
-      { brand: "Lamborghini", model: "Huracan", price: 600, cat: "coupe" },
-      { brand: "Ferrari", model: "F8", price: 700, cat: "coupe" },
-      { brand: "Range Rover", model: "Sport", price: 180, cat: "suv" },
-      { brand: "Bentley", model: "Continental", price: 400, cat: "coupe" },
-      { brand: "Rolls Royce", model: "Phantom", price: 800, cat: "sedan" },
-      { brand: "Aston Martin", model: "DB11", price: 450, cat: "coupe" },
-      { brand: "McLaren", model: "720S", price: 550, cat: "coupe" },
-      { brand: "Lexus", model: "LC500", price: 140, cat: "coupe" },
-      { brand: "Maserati", model: "Ghibli", price: 160, cat: "sedan" },
-      { brand: "Bugatti", model: "Chiron", price: 1500, cat: "coupe" },
-      { brand: "Ford", model: "Mustang", price: 80, cat: "coupe" },
-      { brand: "Chevrolet", model: "Corvette", price: 110, cat: "coupe" },
-      { brand: "Nissan", model: "GT-R", price: 130, cat: "coupe" },
-      { brand: "Jaguar", model: "F-Type", price: 120, cat: "coupe" },
-      { brand: "Volvo", model: "XC90", price: 90, cat: "suv" }
-    ]
-
-    try {
-      for (let i = 0; i < carsData.length; i++) {
-        const car = carsData[i]
-        const res = await fetch(`https://loremflickr.com/1200/800/sportscar?lock=${i + 1}`)
-        const blob = await res.blob()
-        const file = new File([blob], `${car.brand}_${car.model}.jpg`, { type: blob.type })
-
-        await addCar({
-          location: "new york",
-          price_per_day: car.price,
-          description: `Experience the thrill of the ${car.brand} ${car.model}. A truly magnificent vehicle.`,
-          transmission: "automatic",
-          fuel_type: "gas",
-          price: car.price * 1000,
-          seating_capacity: car.cat === "suv" ? 5 : 2,
-          category: car.cat,
-          year: 2024,
-          model: car.model,
-          brand: car.brand,
-          image: file as any
-        })
-        setSeedProgress(i + 1)
-      }
-      toast.success("Successfully seeded 20 cars! 🎉")
-    } catch (err: any) {
-      toast.error("Error seeding cars: " + (err?.response?.data?.message ?? "Unknown error"))
-    } finally {
-      setIsSeeding(false)
-    }
-  }
 
   const initialValues: CarType = {
     location: "", price_per_day: 0, description: "", transmission: "",
@@ -130,16 +70,7 @@ export default function AddCar() {
 
   return (
     <section className="mb-10 max-w-2xl">
-      <div className="flex items-center justify-between">
         <Title title="Add New Car" description="Fill in the details to list a new vehicle for rental." />
-        <Button 
-          onClick={handleSeedCars} 
-          disabled={isSeeding}
-          className="bg-[#06B6D4] hover:bg-[#06B6D4]/90 text-white rounded-xl shadow-lg"
-        >
-          {isSeeding ? `Seeding... ${seedProgress}/20` : "Auto-Seed 20 Cars"}
-        </Button>
-      </div>
 
       <form onSubmit={addCarFormik.handleSubmit} className="mt-8 space-y-6">
 
