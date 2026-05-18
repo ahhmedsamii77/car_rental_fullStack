@@ -53,7 +53,7 @@ export default function BookingInput() {
             value={formik.values.location}
             onValueChange={(val) => formik.setFieldValue("location", val)}
           >
-            <SelectTrigger className="w-full rounded-xl border border-border bg-muted/40 px-3 py-5 text-sm focus:ring-[#7C3AED]/50">
+            <SelectTrigger className="w-full h-9 rounded-xl border border-border bg-muted/40 text-sm focus:ring-[#7C3AED]/50">
               <SelectValue placeholder="Select city" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
