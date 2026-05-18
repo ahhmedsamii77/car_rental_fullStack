@@ -1,3 +1,4 @@
+import { useState } from "react"
 import Title from "../components/shared/Title"
 import { MdDone, MdOutlineCloudUpload } from "react-icons/md"
 import { useFormik } from "formik"
@@ -22,6 +23,66 @@ import { Separator } from "@/components/ui/separator"
 
 export default function AddCar() {
   const { mutateAsync: addCar } = useAddCar()
+  const [isSeeding, setIsSeeding] = useState(false)
+  const [seedProgress, setSeedProgress] = useState(0)
+
+  async function handleSeedCars() {
+    setIsSeeding(true)
+    setSeedProgress(0)
+    
+    const carsData = [
+      { brand: "Honda", model: "Civic", price_per_day: 45, price: 25000, category: "sedan", year: 2023, trans: "automatic", fuel: "gas", loc: "new york", seats: 5, desc: "Reliable and fuel-efficient daily driver with modern tech." },
+      { brand: "Toyota", model: "RAV4", price_per_day: 55, price: 30000, category: "suv", year: 2022, trans: "automatic", fuel: "hybrid", loc: "los angeles", seats: 5, desc: "Spacious and comfortable SUV, perfect for family trips." },
+      { brand: "Ford", model: "F-150", price_per_day: 80, price: 45000, category: "truck", year: 2024, trans: "automatic", fuel: "gas", loc: "houston", seats: 5, desc: "Tough, rugged, and ready for any job or adventure." },
+      { brand: "Tesla", model: "Model 3", price_per_day: 90, price: 40000, category: "sedan", year: 2023, trans: "automatic", fuel: "electric", loc: "chicago", seats: 5, desc: "Experience the future with this sleek electric vehicle." },
+      { brand: "Porsche", model: "911", price_per_day: 250, price: 120000, category: "coupe", year: 2024, trans: "semi-automatic", fuel: "petrol", loc: "los angeles", seats: 2, desc: "Unmatched performance and iconic design." },
+      { brand: "Audi", model: "Q5", price_per_day: 75, price: 50000, category: "suv", year: 2021, trans: "automatic", fuel: "gas", loc: "new york", seats: 5, desc: "Luxury compact SUV offering a smooth and quiet ride." },
+      { brand: "Chevrolet", model: "Corvette", price_per_day: 150, price: 70000, category: "coupe", year: 2023, trans: "manual", fuel: "gas", loc: "houston", seats: 2, desc: "American muscle at its finest, thrilling V8 power." },
+      { brand: "Honda", model: "Odyssey", price_per_day: 65, price: 35000, category: "van", year: 2022, trans: "automatic", fuel: "gas", loc: "chicago", seats: 7, desc: "The ultimate road-trip machine with room for 7." },
+      { brand: "Mercedes-Benz", model: "C-Class", price_per_day: 110, price: 45000, category: "sedan", year: 2024, trans: "automatic", fuel: "gas", loc: "new york", seats: 5, desc: "Elegance and supreme comfort combined." },
+      { brand: "Jeep", model: "Wrangler", price_per_day: 70, price: 38000, category: "suv", year: 2021, trans: "manual", fuel: "gas", loc: "los angeles", seats: 4, desc: "Take the top off and hit the beach or the trails." },
+      { brand: "BMW", model: "X5", price_per_day: 130, price: 65000, category: "suv", year: 2023, trans: "automatic", fuel: "diesel", loc: "chicago", seats: 5, desc: "Sporty handling meets luxurious utility." },
+      { brand: "Toyota", model: "Prius", price_per_day: 40, price: 28000, category: "sedan", year: 2020, trans: "automatic", fuel: "hybrid", loc: "houston", seats: 5, desc: "Unbeatable fuel economy in a practical package." },
+      { brand: "Lexus", model: "RX", price_per_day: 95, price: 55000, category: "suv", year: 2022, trans: "automatic", fuel: "hybrid", loc: "new york", seats: 5, desc: "Incredibly smooth, quiet, and reliable luxury." },
+      { brand: "Ford", model: "Mustang", price_per_day: 85, price: 35000, category: "coupe", year: 2024, trans: "manual", fuel: "gas", loc: "los angeles", seats: 4, desc: "Classic styling with modern V8 rumble." },
+      { brand: "Kia", model: "Carnival", price_per_day: 75, price: 38000, category: "van", year: 2024, trans: "automatic", fuel: "gas", loc: "houston", seats: 8, desc: "A multi-purpose vehicle that feels like a private jet." },
+      { brand: "Hyundai", model: "Elantra", price_per_day: 35, price: 22000, category: "sedan", year: 2021, trans: "automatic", fuel: "gas", loc: "chicago", seats: 5, desc: "Sharp looks and great value for city driving." },
+      { brand: "Nissan", model: "Frontier", price_per_day: 60, price: 32000, category: "truck", year: 2023, trans: "automatic", fuel: "gas", loc: "new york", seats: 5, desc: "Capable mid-size truck for moving or camping." },
+      { brand: "Audi", model: "e-tron", price_per_day: 120, price: 75000, category: "suv", year: 2022, trans: "automatic", fuel: "electric", loc: "los angeles", seats: 5, desc: "Whisper quiet electric luxury with plenty of space." },
+      { brand: "Mazda", model: "MX-5", price_per_day: 65, price: 28000, category: "coupe", year: 2023, trans: "manual", fuel: "petrol", loc: "houston", seats: 2, desc: "The perfect weekend carving car, incredibly fun." },
+      { brand: "Subaru", model: "Outback", price_per_day: 55, price: 33000, category: "suv", year: 2022, trans: "automatic", fuel: "gas", loc: "chicago", seats: 5, desc: "All-wheel drive confidence for any weather condition." }
+    ]
+
+    try {
+      for (let i = 0; i < carsData.length; i++) {
+        const car = carsData[i]
+        const res = await fetch(`https://loremflickr.com/1200/800/${car.category},car?lock=${i + 1}`)
+        const blob = await res.blob()
+        const file = new File([blob], `${car.brand}_${car.model}.jpg`, { type: blob.type })
+
+        await addCar({
+          location: car.loc,
+          price_per_day: car.price_per_day,
+          description: car.desc,
+          transmission: car.trans,
+          fuel_type: car.fuel,
+          price: car.price,
+          seating_capacity: car.seats,
+          category: car.category,
+          year: car.year,
+          model: car.model,
+          brand: car.brand,
+          image: file as any
+        })
+        setSeedProgress(i + 1)
+      }
+      toast.success("Successfully seeded 20 cars! 🎉")
+    } catch (err: any) {
+      toast.error("Error seeding cars: " + (err?.response?.data?.message ?? "Unknown error"))
+    } finally {
+      setIsSeeding(false)
+    }
+  }
 
   const initialValues: CarType = {
     location: "", price_per_day: 0, description: "", transmission: "",
@@ -70,7 +131,16 @@ export default function AddCar() {
 
   return (
     <section className="mb-10 max-w-2xl">
+      <div className="flex items-center justify-between">
         <Title title="Add New Car" description="Fill in the details to list a new vehicle for rental." />
+        <Button 
+          onClick={handleSeedCars} 
+          disabled={isSeeding}
+          className="bg-[#06B6D4] hover:bg-[#06B6D4]/90 text-white rounded-xl shadow-lg"
+        >
+          {isSeeding ? `Seeding... ${seedProgress}/20` : "Auto-Seed 20 Cars"}
+        </Button>
+      </div>
 
       <form onSubmit={addCarFormik.handleSubmit} className="mt-8 space-y-6">
 
