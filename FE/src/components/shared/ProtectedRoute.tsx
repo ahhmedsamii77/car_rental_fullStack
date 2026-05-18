@@ -14,14 +14,27 @@ export function ProtectedRoute() {
 
 /** Requires admin role */
 export function AdminRoute({ request }: { request: Request }) {
-  const token    = localStorage.getItem("access_token");
-  const userInfo = queryClient.getQueryData<{ data: { data: { role: string } } }>(["userInfo"]);
-  const role     = userInfo?.data?.data?.role;
+  const token = localStorage.getItem("access_token");
+
+  // No token at all → definitely not allowed
+  if (!token) {
+    toast.error("Please login first");
+    return redirect("/");
+  }
+
+  // 1. Try React Query cache first (populated after first fetch)
+  // 2. Fall back to localStorage (set at login time)
+  // 3. If neither source has data yet, allow through — the Dashboard
+  //    page will re-check once useGetUserInfo resolves
+  const cached = queryClient.getQueryData<{ data: { data: { role: string } } }>(["userInfo"]);
+  const role   = cached?.data?.data?.role ?? localStorage.getItem("role");
+
   const pathname = new URL(request.url).pathname;
 
-  if (!token || (pathname.includes("dashboard") && role !== "admin")) {
+  if (pathname.includes("dashboard") && role !== null && role !== "admin") {
     toast.error("Admin access required");
     return redirect("/");
   }
+
   return null;
 }
