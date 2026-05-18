@@ -6,6 +6,13 @@ import * as yup from "yup"
 import { motion } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { FaMapMarkerAlt, FaCalendarAlt } from "react-icons/fa"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function BookingInput() {
   const navigate = useNavigate()
@@ -40,18 +47,20 @@ export default function BookingInput() {
           <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
             <FaMapMarkerAlt className="text-[#7C3AED]" /> Location
           </label>
-          <select
-            name="location"
+          <Select
             value={formik.values.location}
-            onChange={formik.handleChange}
-            className="w-full rounded-xl border border-border bg-muted/40 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/50 cursor-pointer"
+            onValueChange={(val) => formik.setFieldValue("location", val)}
           >
-            <option value="" disabled>Select city</option>
-            <option value="New York">New York</option>
-            <option value="Los Angeles">Los Angeles</option>
-            <option value="Houston">Houston</option>
-            <option value="Chicago">Chicago</option>
-          </select>
+            <SelectTrigger className="w-full rounded-xl border border-border bg-muted/40 px-3 py-5 text-sm focus:ring-[#7C3AED]/50">
+              <SelectValue placeholder="Select city" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              <SelectItem value="New York">New York</SelectItem>
+              <SelectItem value="Los Angeles">Los Angeles</SelectItem>
+              <SelectItem value="Houston">Houston</SelectItem>
+              <SelectItem value="Chicago">Chicago</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Pickup */}
