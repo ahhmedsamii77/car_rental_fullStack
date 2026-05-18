@@ -72,6 +72,9 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Plus Jakarta Sans', sans-serif;
   }
+  button, a, select, label, [role="button"], [role="option"], [role="menuitem"], [role="tab"] {
+    cursor: pointer;
+  }
 }
 
 /* Nav link underline animation */
