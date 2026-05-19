@@ -59,9 +59,13 @@ export default function ManageCarData({ car }: { car: CarResType }) {
       </span>
 
       {/* Price */}
-      <span className="text-[13px] font-semibold text-[#7C3AED] shrink-0">
-        ${car.price}<span className="text-muted-foreground font-normal text-[11px]">/day</span>
-      </span>
+      <div className="shrink-0 text-right">
+        <div className="flex items-baseline gap-0.5">
+          <span className="text-[13px] font-bold text-[#7C3AED]">${car.price_per_day}</span>
+          <span className="text-muted-foreground font-normal text-[11px]">/day</span>
+        </div>
+        <p className="text-[10px] text-muted-foreground">Total: ${car.price}</p>
+      </div>
 
       {/* Status */}
       <Badge

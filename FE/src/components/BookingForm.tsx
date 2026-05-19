@@ -56,7 +56,7 @@ export default function BookingForm({ car }: { car: CarResType }) {
         <CardHeader className="pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-baseline gap-1">
-              <span className="text-3xl font-bold text-[#7C3AED]">${car.price}</span>
+              <span className="text-3xl font-bold text-[#7C3AED]">${car.price_per_day}</span>
               <span className="text-muted-foreground text-sm">/day</span>
             </div>
             <span className="inline-flex items-center gap-1 bg-[#7C3AED]/10 text-[#7C3AED] text-xs font-semibold px-3 py-1 rounded-full">

@@ -36,7 +36,7 @@ export default function CarCard({ car }: { car: CarResType }) {
 
             {/* Price tag */}
             <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-sm text-slate-900 px-3 py-1.5 rounded-xl text-sm font-bold shadow-lg">
-              <span className="text-[#7C3AED]">${car.price}</span>
+              <span className="text-[#7C3AED]">${car.price_per_day}</span>
               <span className="text-slate-400 font-normal text-xs">/day</span>
             </div>
           </div>
