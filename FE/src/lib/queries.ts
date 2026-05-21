@@ -4,8 +4,12 @@ import type {
   BookingType,
   CarType,
   ConfirmEmailType,
+  ForgotPasswordType,
   LoginType,
+  ResendOtpType,
+  ResetPasswordType,
   UserType,
+  VerifyResetOtpType,
 } from "@/types";
 
 // ─── API imports ──────────────────────────────────────────────────────────────
@@ -13,8 +17,12 @@ import {
   createUser,
   login,
   confirmEmail,
+  resendOtp,
   logout,
   refreshToken,
+  sendResetPasswordOtp,
+  verifyResetPasswordOtp,
+  resetPassword,
 } from "./auth.api";
 
 import { getUserInfo, updateProfileImage } from "./user.api";
@@ -63,6 +71,30 @@ export function useLogout() {
 export function useRefershToken() {
   return useMutation({
     mutationFn: () => refreshToken(),
+  });
+}
+
+export function useResendOtp() {
+  return useMutation({
+    mutationFn: (data: ResendOtpType) => resendOtp(data),
+  });
+}
+
+export function useSendResetPasswordOtp() {
+  return useMutation({
+    mutationFn: (data: ForgotPasswordType) => sendResetPasswordOtp(data),
+  });
+}
+
+export function useVerifyResetPasswordOtp() {
+  return useMutation({
+    mutationFn: (data: VerifyResetOtpType) => verifyResetPasswordOtp(data),
+  });
+}
+
+export function useResetPassword() {
+  return useMutation({
+    mutationFn: (data: ResetPasswordType) => resetPassword(data),
   });
 }
 

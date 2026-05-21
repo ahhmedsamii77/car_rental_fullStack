@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react"
 import Signin from "./Signin"
 import Signup from "./Signup"
 import ConfirmEmail from "./ConfirmEmail"
+import ForgotPassword from "./ForgotPassword"
 import { motion, AnimatePresence } from "motion/react"
 import { FaCar } from "react-icons/fa6"
 import { IoCloseOutline } from "react-icons/io5"
@@ -14,8 +15,9 @@ export default function Modal({
 }: {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-  const [showConfirmEmail, setShowConfirmEmail] = useState(false)
-  const [activeTab, setActiveTab] = useState<Tab>("signin")
+  const [showConfirmEmail,   setShowConfirmEmail]   = useState(false)
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
+  const [activeTab,          setActiveTab]          = useState<Tab>("signin")
   const { accessToken } = useContext(authContext)!
 
   // Auto-close when user logs in successfully
@@ -28,6 +30,23 @@ export default function Modal({
     document.body.style.overflow = "hidden"
     return () => { document.body.style.overflow = "" }
   }, [])
+
+  // ── Derive header text ──
+  const headerTitle = showForgotPassword
+    ? "Forgot Password 🔑"
+    : showConfirmEmail
+    ? "Verify Your Email"
+    : activeTab === "signin"
+    ? "Welcome Back 👋"
+    : "Create Account"
+
+  const headerSubtitle = showForgotPassword
+    ? "We'll send a code to reset your password."
+    : showConfirmEmail
+    ? "Enter the 4-digit code sent to your inbox."
+    : activeTab === "signin"
+    ? "Sign in to continue your DriveEase journey"
+    : "Join thousands of happy renters today"
 
   return (
     <AnimatePresence>
@@ -76,26 +95,16 @@ export default function Modal({
 
             {/* Title */}
             <h2 className="text-2xl font-bold text-white leading-tight" style={{ fontFamily: "var(--font-display)" }}>
-              {showConfirmEmail
-                ? "Verify Your Email"
-                : activeTab === "signin"
-                ? "Welcome Back 👋"
-                : "Create Account"}
+              {headerTitle}
             </h2>
-            <p className="text-white/70 text-sm mt-1.5">
-              {showConfirmEmail
-                ? "Enter the 4-digit code sent to your inbox."
-                : activeTab === "signin"
-                ? "Sign in to continue your DriveEase journey"
-                : "Join thousands of happy renters today"}
-            </p>
+            <p className="text-white/70 text-sm mt-1.5">{headerSubtitle}</p>
           </div>
 
           {/* ── Body ── */}
           <div className="px-6 pb-7 pt-5 bg-background">
 
-            {/* Tab switcher — only when not on confirm email */}
-            {!showConfirmEmail && (
+            {/* Tab switcher — only on signin/signup */}
+            {!showConfirmEmail && !showForgotPassword && (
               <div className="flex rounded-xl bg-muted p-1 mb-5">
                 {(["signin", "signup"] as Tab[]).map((tab) => (
                   <button
@@ -115,7 +124,23 @@ export default function Modal({
 
             {/* Animated form */}
             <AnimatePresence mode="wait">
-              {showConfirmEmail ? (
+              {showForgotPassword ? (
+                <motion.div
+                  key="forgot"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <ForgotPassword
+                    setShowForgotPassword={setShowForgotPassword}
+                    setShowLogin={(v) => {
+                      setShowForgotPassword(false)
+                      setActiveTab(v ? "signin" : "signup")
+                    }}
+                  />
+                </motion.div>
+              ) : showConfirmEmail ? (
                 <motion.div
                   key="confirm"
                   initial={{ opacity: 0, y: 10 }}
@@ -136,7 +161,10 @@ export default function Modal({
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.18 }}
                 >
-                  <Signin setShowLogin={(v) => setActiveTab(v ? "signin" : "signup")} />
+                  <Signin
+                    setShowLogin={(v) => setActiveTab(v ? "signin" : "signup")}
+                    setShowForgotPassword={() => setShowForgotPassword(true)}
+                  />
                 </motion.div>
               ) : (
                 <motion.div

@@ -13,7 +13,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export default function Signin({ setShowLogin }: { setShowLogin: React.Dispatch<React.SetStateAction<boolean>> }) {
+export default function Signin({
+  setShowLogin,
+  setShowForgotPassword,
+}: {
+  setShowLogin: (v: boolean) => void
+  setShowForgotPassword?: () => void
+}) {
   const { mutateAsync: signin } = useLogin()
   const { setRefershToken, setAccessToken } = useContext(authContext)!
 
@@ -68,7 +74,18 @@ export default function Signin({ setShowLogin }: { setShowLogin: React.Dispatch<
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="password" className="text-sm font-medium">Password</Label>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="password" className="text-sm font-medium">Password</Label>
+          {setShowForgotPassword && (
+            <button
+              type="button"
+              onClick={setShowForgotPassword}
+              className="text-xs text-[#7C3AED] hover:underline cursor-pointer font-medium"
+            >
+              Forgot password?
+            </button>
+          )}
+        </div>
         <div className="relative">
           <TbPassword className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input

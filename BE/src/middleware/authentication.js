@@ -27,11 +27,18 @@ export async function authentication(req, res, next) {
   if (!user) {
     throw new Error("user not found", { cause: 404 });
   }
-  if (!user.confirmed) {
+  if (!user.confirmedAt) {
     throw new Error("user not confirmed", { cause: 403 });
   }
   if (user.isBanned) {
     throw new Error("user is banned", { cause: 403 });
+  }
+  // reject tokens issued before a password/credentials change
+  if (
+    user.changeCredentialsTime &&
+    decoded.iat * 1000 < user.changeCredentialsTime.getTime()
+  ) {
+    throw new Error("credentials changed, please login again", { cause: 401 });
   }
   req.user = user;
   req.decoded = decoded;

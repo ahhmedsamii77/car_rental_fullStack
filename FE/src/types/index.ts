@@ -25,6 +25,25 @@ export type ConfirmEmailType = {
   otp: string;
 };
 
+export type ResendOtpType = {
+  email: string;
+};
+
+export type ForgotPasswordType = {
+  email: string;
+};
+
+export type VerifyResetOtpType = {
+  email: string;
+  otp: string;
+};
+
+export type ResetPasswordType = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
 export type AuthContextType = {
   accessToken: string | null;
   setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;

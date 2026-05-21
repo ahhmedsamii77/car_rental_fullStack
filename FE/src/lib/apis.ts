@@ -42,7 +42,7 @@ api.interceptors.response.use(
     if (
       error.response?.status !== 401 ||
       originalRequest._retry ||
-      originalRequest.url?.includes("/refershToken")
+      originalRequest.url?.includes("/refreshToken")
     ) {
       return Promise.reject(error);
     }
@@ -55,7 +55,7 @@ api.interceptors.response.use(
         const prefix = getPrefix(refreshToken ?? undefined);
         refreshPromise = axios
           .post(
-            `${baseURL}/users/refershToken`,
+            `${baseURL}/users/refreshToken`,
             {},
             { headers: { authorization: refreshToken ? `${prefix} ${refreshToken}` : "" } },
           )

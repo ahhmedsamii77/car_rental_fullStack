@@ -1,6 +1,6 @@
 import { MdErrorOutline, MdOutlineMail } from "react-icons/md"
 import { TbPassword } from "react-icons/tb"
-import { useConfirmEmail } from "../lib/queries"
+import { useConfirmEmail, useResendOtp } from "../lib/queries"
 import type { ConfirmEmailType } from "../types"
 import toast from "react-hot-toast"
 import { useFormik } from "formik"
@@ -10,15 +10,18 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { FiMail } from "react-icons/fi"
+import { useState } from "react"
 
 export default function ConfirmEmail({
   setShowConfirmEmail,
   setShowLogin,
 }: {
   setShowConfirmEmail: React.Dispatch<React.SetStateAction<boolean>>
-  setShowLogin: React.Dispatch<React.SetStateAction<boolean>>
+  setShowLogin: (v: boolean) => void
 }) {
-  const { mutateAsync: confirmEmail } = useConfirmEmail()
+  const { mutateAsync: confirmEmail }   = useConfirmEmail()
+  const { mutateAsync: resendOtp }      = useResendOtp()
+  const [isResending, setIsResending]   = useState(false)
 
   const initialValues: ConfirmEmailType = { otp: "", email: "" }
 
@@ -31,6 +34,24 @@ export default function ConfirmEmail({
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } }
       toast.error(err?.response?.data?.message ?? "Confirmation failed")
+    }
+  }
+
+  async function handleResend() {
+    const email = formik.values.email
+    if (!email || formik.errors.email) {
+      toast.error("Please enter a valid email first")
+      return
+    }
+    setIsResending(true)
+    try {
+      await resendOtp({ email })
+      toast.success("A new OTP has been sent to your email")
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } } }
+      toast.error(err?.response?.data?.message ?? "Failed to resend OTP")
+    } finally {
+      setIsResending(false)
     }
   }
 
@@ -76,7 +97,17 @@ export default function ConfirmEmail({
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="otp" className="text-sm font-medium">OTP Code</Label>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="otp" className="text-sm font-medium">OTP Code</Label>
+          <button
+            type="button"
+            onClick={handleResend}
+            disabled={isResending}
+            className="text-xs text-[#7C3AED] hover:underline cursor-pointer font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isResending ? <ClipLoader color="#7C3AED" size={12} /> : "Resend OTP"}
+          </button>
+        </div>
         <div className="relative">
           <TbPassword className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input

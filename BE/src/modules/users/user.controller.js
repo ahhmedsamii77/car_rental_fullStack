@@ -11,11 +11,19 @@ userRouter.post("/register", validation(UV.registerSchema), US.register);
 // comfirm email
 userRouter.patch("/confirmEmail", validation(UV.confirmEmailSchema), US.confirmEmail);
 
+// resend otp
+userRouter.post("/resendOtp", validation(UV.resendOtpSchema), US.resendOtp);
+
 // login
 userRouter.post("/login", validation(UV.loginSchema), US.login);
 
-// refersh token
-userRouter.post("/refershToken", US.refershToken);
+// forgot password
+userRouter.post("/forgotPassword", validation(UV.forgetPasswordSchema), US.sendResetPasswordOtp);
+userRouter.patch("/forgotPassword/verify", validation(UV.verifyResetOtpSchema), US.verifyResetPasswordOtp);
+userRouter.patch("/forgotPassword/reset", validation(UV.resetPasswordSchema), US.resetPassword);
+
+// refresh token
+userRouter.post("/refreshToken", US.refreshToken);
 
 // revoke token
 userRouter.patch("/revokeToken", authentication, US.revokeToken);
@@ -27,4 +35,4 @@ userRouter.get("/userInfo", authentication, US.getUserInfo);
 userRouter.patch("/changeRuleToAdmin", authentication, US.changeRuleToAdmin);
 
 // update profile image
-userRouter.patch("/updateProfileImage", authentication, Multer(customExtensions.image).single("image"), US.updteProfileImage);
+userRouter.patch("/updateProfileImage", authentication, Multer(customExtensions.image).single("image"), US.updateProfileImage);
