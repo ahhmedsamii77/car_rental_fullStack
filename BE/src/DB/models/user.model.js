@@ -6,11 +6,6 @@ export const userRoles = {
   admin: "admin"
 };
 
-export const providerTypes = {
-  system: "system",
-  google: "google"
-};
-
 export const genderTypes = {
   male: "male",
   female: "female"
@@ -32,9 +27,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: function () {
-      return this.provider === providerTypes.system;
-    },
+    required: true,
     minLength: 8
   },
   phone: { type: String },
@@ -56,11 +49,6 @@ const userSchema = new mongoose.Schema({
       secure_url: String,
       public_id: String
     }
-  },
-  provider: {
-    type: String,
-    enum: Object.values(providerTypes),
-    default: providerTypes.system
   },
   changeCredentialsTime: { type: Date },
   isBanned: Boolean,

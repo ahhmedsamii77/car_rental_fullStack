@@ -5,7 +5,6 @@ import {
   revokeTokenModel,
   userModel,
   userRoles,
-  providerTypes,
 } from "../../DB/index.js";
 import {
   hash,
@@ -175,12 +174,6 @@ export async function login(req, res, next) {
     await sendOtp(user._id, otpTypes.confirmEmail);
     return res.status(200).json({ message: "code sent to your email" });
   }
-  if (user.provider === providerTypes.google) {
-    throw new Error(
-      "This account uses Google login. Please sign in with Google.",
-      { cause: 409 }
-    );
-  }
   const isPasswordMatch = await compare({
     plaintext: password,
     ciphertext: user.password,
@@ -205,7 +198,6 @@ export async function sendResetPasswordOtp(req, res, next) {
   const user = await userModel.findOne(
     {
       email,
-      provider: providerTypes.system,
       confirmedAt: { $exists: true },
     },
     undefined,
@@ -238,7 +230,6 @@ export async function verifyResetPasswordOtp(req, res, next) {
   const user = await userModel.findOne(
     {
       email,
-      provider: providerTypes.system,
       confirmedAt: { $exists: true },
     },
     undefined,
@@ -285,7 +276,6 @@ export async function resetPassword(req, res, next) {
   const user = await userModel.findOne(
     {
       email,
-      provider: providerTypes.system,
       confirmedAt: { $exists: true },
     },
     undefined,
