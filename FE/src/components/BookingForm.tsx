@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { FiCalendar, FiShield, FiLock } from "react-icons/fi"
+import { FiCalendar, FiShield, FiLock, FiAlertCircle } from "react-icons/fi"
 import { FaTag } from "react-icons/fa"
 import Modal from "./Modal"
 
@@ -85,8 +85,21 @@ export default function BookingForm({ car }: { car: CarResType }) {
         <Separator />
 
         <CardContent className="pt-5">
+          {/* Currently booked banner */}
+          {car.hasActiveBookings && (
+            <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-4">
+              <FiAlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-amber-800">This car is currently booked</p>
+                <p className="text-xs text-amber-600 mt-0.5">
+                  It has an active reservation. Please check back later or browse other cars.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Not logged in banner */}
-          {!accessToken && (
+          {!accessToken && !car.hasActiveBookings && (
             <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-4">
               <FiLock className="w-4 h-4 text-amber-600 shrink-0" />
               <div>
@@ -115,7 +128,8 @@ export default function BookingForm({ car }: { car: CarResType }) {
                 value={formik.values.pickupDate}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="rounded-xl focus-visible:ring-[#7C3AED]"
+                disabled={!!car.hasActiveBookings}
+                className="rounded-xl focus-visible:ring-[#7C3AED] disabled:opacity-50 disabled:cursor-not-allowed"
               />
               {formik.touched.pickupDate && formik.errors.pickupDate && (
                 <p className="text-destructive text-xs">{formik.errors.pickupDate}</p>
@@ -134,7 +148,8 @@ export default function BookingForm({ car }: { car: CarResType }) {
                 value={formik.values.returnDate}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="rounded-xl focus-visible:ring-[#7C3AED]"
+                disabled={!!car.hasActiveBookings}
+                className="rounded-xl focus-visible:ring-[#7C3AED] disabled:opacity-50 disabled:cursor-not-allowed"
               />
               {formik.touched.returnDate && formik.errors.returnDate && (
                 <p className="text-destructive text-xs">{formik.errors.returnDate}</p>
@@ -165,11 +180,17 @@ export default function BookingForm({ car }: { car: CarResType }) {
 
             <Button
               type="submit"
-              disabled={formik.isSubmitting || (!accessToken ? false : (!formik.isValid || !formik.dirty))}
+              disabled={
+                !!car.hasActiveBookings ||
+                formik.isSubmitting ||
+                (!accessToken ? false : (!formik.isValid || !formik.dirty))
+              }
               className="w-full gradient-primary text-white rounded-xl h-11 font-semibold hover:opacity-90 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mt-2"
             >
               {formik.isSubmitting ? (
                 <ClipLoader color="#fff" size={18} />
+              ) : car.hasActiveBookings ? (
+                <><FiAlertCircle className="w-4 h-4 mr-1" /> Car Unavailable</>
               ) : !accessToken ? (
                 <><FiLock className="w-4 h-4 mr-1" /> Login to Book</>
               ) : (

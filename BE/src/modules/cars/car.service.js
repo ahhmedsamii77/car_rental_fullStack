@@ -110,15 +110,36 @@ export async function getCars(req, res, next) {
   let { page, limit, query } = req.query;
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 6;
+  const now = new Date();
+
+  let filter = { isAvailable: true };
   if (query) {
     query = query.toLowerCase();
-    const total = await carModel.countDocuments({ isAvailable: true, $or: [{ brand: { $regex: query, $options: "i" } }, { model: { $regex: query, $options: "i" } }] });
-    const cars = await carModel.find({ isAvailable: true, $or: [{ brand: { $regex: query, $options: "i" } }, { model: { $regex: query, $options: "i" } }] }).skip((page - 1) * limit).limit(limit);
-    return res.status(200).json({ message: "cars", page, total, cars });
+    filter = {
+      isAvailable: true,
+      $or: [
+        { brand: { $regex: query, $options: "i" } },
+        { model: { $regex: query, $options: "i" } },
+      ],
+    };
   }
-  const total = await carModel.countDocuments({ isAvailable: true });
-  const cars = await carModel.find({ isAvailable: true }).skip((page - 1) * limit).limit(limit);
-  return res.status(200).json({ message: "cars", page, total, cars });
+
+  const total = await carModel.countDocuments(filter);
+  const cars  = await carModel.find(filter).skip((page - 1) * limit).limit(limit);
+
+  // Attach real-time booking status to each car
+  const carsWithStatus = await Promise.all(
+    cars.map(async (car) => {
+      const activeBooking = await bookingModel.findOne({
+        carId: car._id,
+        status: { $ne: bookingStatus.cancelled },
+        returnDate: { $gte: now },
+      });
+      return { ...car.toObject(), hasActiveBookings: !!activeBooking };
+    })
+  );
+
+  return res.status(200).json({ message: "cars", page, total, cars: carsWithStatus });
 }
 
 
@@ -129,5 +150,11 @@ export async function getCarById(req, res, next) {
   if (!car) {
     throw new Error("car not found", { cause: 404 });
   }
-  return res.status(200).json({ message: "car", car });
+  const now = new Date();
+  const activeBooking = await bookingModel.findOne({
+    carId: car._id,
+    status: { $ne: bookingStatus.cancelled },
+    returnDate: { $gte: now },
+  });
+  return res.status(200).json({ message: "car", car: { ...car.toObject(), hasActiveBookings: !!activeBooking } });
 }

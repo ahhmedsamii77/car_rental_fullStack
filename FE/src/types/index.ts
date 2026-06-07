@@ -96,7 +96,8 @@ export type CarResType = {
     public_id: string;
   };
   _id: string;
-  isAvailable: boolean
+  isAvailable: boolean;
+  hasActiveBookings?: boolean;
 }
 
 export type BookingType = {

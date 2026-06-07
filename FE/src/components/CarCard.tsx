@@ -26,12 +26,18 @@ export default function CarCard({ car }: { car: CarResType }) {
             {/* Badges */}
             <Badge
               className={`absolute top-3 left-3 text-xs font-semibold ${
-                car.isAvailable
-                  ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                  : "bg-red-500 text-white hover:bg-red-600"
+                !car.isAvailable
+                  ? "bg-red-500 text-white hover:bg-red-600"
+                  : car.hasActiveBookings
+                  ? "bg-amber-500 text-white hover:bg-amber-600"
+                  : "bg-emerald-500 text-white hover:bg-emerald-600"
               }`}
             >
-              {car.isAvailable ? "Available" : "Unavailable"}
+              {!car.isAvailable
+                ? "Unavailable"
+                : car.hasActiveBookings
+                ? "Booked"
+                : "Available"}
             </Badge>
 
             {/* Price tag */}

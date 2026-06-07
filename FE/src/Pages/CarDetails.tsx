@@ -58,8 +58,20 @@ export default function CarDetails() {
                 alt={car.description}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-              <Badge className="absolute top-4 left-4 bg-white/90 text-[#7C3AED] border-0 font-semibold shadow">
-                {car.isAvailable ? "✓ Available" : "✗ Unavailable"}
+              <Badge
+                className={`absolute top-4 left-4 border-0 font-semibold shadow ${
+                  !car.isAvailable
+                    ? "bg-red-100 text-red-700"
+                    : car.hasActiveBookings
+                    ? "bg-amber-100 text-amber-700"
+                    : "bg-white/90 text-emerald-700"
+                }`}
+              >
+                {!car.isAvailable
+                  ? "✗ Unavailable"
+                  : car.hasActiveBookings
+                  ? "⏳ Currently Booked"
+                  : "✓ Available"}
               </Badge>
             </div>
 
