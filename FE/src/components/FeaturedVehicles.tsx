@@ -23,7 +23,7 @@ export default function FeaturedVehicles() {
   return (
     <section className="w-full py-16">
       <div className="container mx-auto px-4 lg:px-8 2xl:px-20">
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 w-full mx-auto">
           <Title
             title="Featured Vehicles"
             description="Explore our premium fleet — from sporty coupes to spacious SUVs."
