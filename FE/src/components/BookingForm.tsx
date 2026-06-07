@@ -68,7 +68,7 @@ export default function BookingForm({ car }: { car: CarResType }) {
 
   return (
     <>
-      <Card className="border-border/60 shadow-violet sticky top-24">
+      <Card className="border-border/60 shadow-violet lg:sticky lg:top-24">
         <CardHeader className="pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-baseline gap-1">

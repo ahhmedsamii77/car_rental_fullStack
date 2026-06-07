@@ -85,7 +85,7 @@ export default function TestimonialsPage() {
   return (
     <div className="w-full">
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden gradient-hero py-24 flex items-center">
+      <section className="relative overflow-hidden gradient-hero py-16 md:py-24 flex items-center">
         <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-[#7C3AED]/10 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-32 -left-32 w-[400px] h-[400px] rounded-full bg-[#06B6D4]/10 blur-3xl pointer-events-none" />
 
@@ -94,7 +94,7 @@ export default function TestimonialsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="inline-block bg-[#7C3AED]/10 text-[#7C3AED] border border-[#7C3AED]/30 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-wider uppercase"
+            className="inline-block bg-[#7C3AED]/10 text-[#7C3AED] border border-[#7C3AED]/30 text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-wider uppercase"
           >
             ✦ Customer Stories
           </motion.span>
@@ -103,7 +103,7 @@ export default function TestimonialsPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-bold leading-tight tracking-tight font-[family-name:var(--font-display)] mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight font-[family-name:var(--font-display)] mb-5"
           >
             What Our{" "}
             <span className="bg-gradient-to-r from-[#7C3AED] via-[#6366F1] to-[#06B6D4] bg-clip-text text-transparent">
@@ -115,7 +115,7 @@ export default function TestimonialsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed"
+            className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto leading-relaxed px-2"
           >
             Thousands of renters trust DriveEase for their premium driving experiences.
             Here's what they have to say.
@@ -124,9 +124,9 @@ export default function TestimonialsPage() {
       </section>
 
       {/* ── Rating highlights ─────────────────────────────────────────────── */}
-      <section className="w-full py-14 bg-gradient-to-b from-transparent to-[#F5F3FF]/40">
+      <section className="w-full py-12 md:py-14 bg-gradient-to-b from-transparent to-[#F5F3FF]/40">
         <div className="container mx-auto px-4 lg:px-8 2xl:px-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {highlights.map(({ value, label }, i) => (
               <motion.div
                 key={label}
@@ -134,15 +134,15 @@ export default function TestimonialsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="text-center"
+                className="text-center px-2"
               >
                 <div className="flex justify-center mb-2">
                   {Array(5).fill(0).map((_, idx) => (
-                    <FaStar key={idx} className="w-4 h-4 text-[#F59E0B]" />
+                    <FaStar key={idx} className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#F59E0B]" />
                   ))}
                 </div>
-                <p className="text-3xl font-bold text-foreground font-[family-name:var(--font-display)]">{value}</p>
-                <p className="text-sm text-muted-foreground mt-1">{label}</p>
+                <p className="text-2xl md:text-3xl font-bold text-foreground font-[family-name:var(--font-display)]">{value}</p>
+                <p className="text-xs md:text-sm text-muted-foreground mt-1">{label}</p>
               </motion.div>
             ))}
           </div>
@@ -152,27 +152,27 @@ export default function TestimonialsPage() {
       <Separator className="max-w-5xl mx-auto" />
 
       {/* ── Testimonials grid ────────────────────────────────────────────── */}
-      <section className="w-full py-20">
+      <section className="w-full py-14 md:py-20">
         <div className="container mx-auto px-4 lg:px-8 2xl:px-20">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {testimonials.map((t, i) => (
               <motion.div
                 key={t.id}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
                 whileHover={{ y: -6 }}
                 viewport={{ once: true }}
               >
                 <Card className="border-border/60 shadow-sm hover:shadow-violet transition-shadow duration-300 h-full">
-                  <CardContent className="p-6 flex flex-col gap-4 h-full">
+                  <CardContent className="p-5 md:p-6 flex flex-col gap-4 h-full">
                     {/* Quote icon */}
-                    <FaQuoteLeft className="w-6 h-6 text-[#7C3AED]/30" />
+                    <FaQuoteLeft className="w-5 h-5 md:w-6 md:h-6 text-[#7C3AED]/30" />
 
                     {/* Stars */}
                     <div className="flex gap-1">
                       {Array(t.rating).fill(0).map((_, idx) => (
-                        <FaStar key={idx} className="w-4 h-4 text-[#F59E0B]" />
+                        <FaStar key={idx} className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#F59E0B]" />
                       ))}
                     </div>
 
@@ -192,13 +192,13 @@ export default function TestimonialsPage() {
                     {/* Author */}
                     <div className="flex items-center gap-3 pt-2 border-t border-border/60">
                       <img
-                        className="w-10 h-10 rounded-full object-cover ring-2 ring-[#7C3AED]/20"
+                        className="w-9 h-9 md:w-10 md:h-10 rounded-full object-cover ring-2 ring-[#7C3AED]/20 shrink-0"
                         src={t.image}
                         alt={t.name}
                       />
-                      <div>
-                        <p className="font-semibold text-sm text-foreground">{t.name}</p>
-                        <p className="text-xs text-muted-foreground">{t.address}</p>
+                      <div className="min-w-0">
+                        <p className="font-semibold text-sm text-foreground truncate">{t.name}</p>
+                        <p className="text-xs text-muted-foreground truncate">{t.address}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -210,7 +210,7 @@ export default function TestimonialsPage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section className="w-full py-20">
+      <section className="w-full py-14 md:py-20">
         <div className="container mx-auto px-4 lg:px-8 2xl:px-20">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -220,15 +220,15 @@ export default function TestimonialsPage() {
             className="relative overflow-hidden rounded-3xl"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-[#7C3AED] via-[#6366F1] to-[#06B6D4]" />
-            <div className="relative z-10 text-center text-white py-16 px-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 font-[family-name:var(--font-display)]">
+            <div className="relative z-10 text-center text-white py-12 md:py-16 px-5 md:px-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 font-[family-name:var(--font-display)]">
                 Join 50,000+ Happy Renters
               </h2>
-              <p className="text-white/80 max-w-lg mx-auto mb-8 text-base">
+              <p className="text-white/80 max-w-lg mx-auto mb-8 text-sm md:text-base">
                 Experience the DriveEase difference for yourself. Book your dream car today.
               </p>
               <Link to="/cars">
-                <Button className="bg-white text-[#7C3AED] hover:bg-white/90 rounded-full px-8 py-3 font-semibold text-base cursor-pointer">
+                <Button className="bg-white text-[#7C3AED] hover:bg-white/90 rounded-full px-6 md:px-8 py-2.5 md:py-3 font-semibold text-sm md:text-base cursor-pointer">
                   Browse Cars →
                 </Button>
               </Link>

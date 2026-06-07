@@ -72,9 +72,9 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-4 lg:gap-6">
             {visibleLinks.map((link) => (
-              <NavLink key={link.name} className="nav-link text-sm font-medium text-foreground/80" to={link.path} end={link.path === "/"}>
+              <NavLink key={link.name} className="nav-link text-xs lg:text-sm font-medium text-foreground/80 whitespace-nowrap" to={link.path} end={link.path === "/"}>
                 {link.name}
               </NavLink>
             ))}

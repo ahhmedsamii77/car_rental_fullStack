@@ -83,7 +83,7 @@ export default function About() {
   return (
     <div className="w-full">
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden gradient-hero py-24 min-h-[55vh] flex items-center">
+      <section className="relative overflow-hidden gradient-hero py-16 md:py-24 min-h-[50vh] flex items-center">
         <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-[#7C3AED]/10 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-32 -left-32 w-[400px] h-[400px] rounded-full bg-[#06B6D4]/10 blur-3xl pointer-events-none" />
 
@@ -92,7 +92,7 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="inline-block bg-[#7C3AED]/10 text-[#7C3AED] border border-[#7C3AED]/30 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-wider uppercase"
+            className="inline-block bg-[#7C3AED]/10 text-[#7C3AED] border border-[#7C3AED]/30 text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-wider uppercase"
           >
             ✦ Our Story
           </motion.span>
@@ -101,7 +101,7 @@ export default function About() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-bold leading-tight tracking-tight font-[family-name:var(--font-display)] mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight font-[family-name:var(--font-display)] mb-5"
           >
             Driving the Future of{" "}
             <span className="bg-gradient-to-r from-[#7C3AED] via-[#6366F1] to-[#06B6D4] bg-clip-text text-transparent">
@@ -113,7 +113,7 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed"
+            className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto leading-relaxed px-2"
           >
             DriveEase was born from a simple belief: renting a premium car should be as effortless
             as unlocking your phone. We connect car owners with renters through a seamless,
@@ -123,7 +123,7 @@ export default function About() {
       </section>
 
       {/* ── Stats ────────────────────────────────────────────────────────── */}
-      <section className="w-full py-16 bg-gradient-to-b from-transparent to-[#F5F3FF]/40">
+      <section className="w-full py-12 md:py-16 bg-gradient-to-b from-transparent to-[#F5F3FF]/40">
         <div className="container mx-auto px-4 lg:px-8 2xl:px-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map(({ icon: Icon, value, label }, i) => (
@@ -133,13 +133,13 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="text-center"
+                className="text-center px-2"
               >
-                <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#7C3AED]/10 mb-4">
-                  <Icon className="w-6 h-6 text-[#7C3AED]" />
+                <div className="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-[#7C3AED]/10 mb-3">
+                  <Icon className="w-5 h-5 md:w-6 md:h-6 text-[#7C3AED]" />
                 </div>
-                <p className="text-3xl font-bold text-foreground font-[family-name:var(--font-display)]">{value}</p>
-                <p className="text-sm text-muted-foreground mt-1">{label}</p>
+                <p className="text-2xl md:text-3xl font-bold text-foreground font-[family-name:var(--font-display)]">{value}</p>
+                <p className="text-xs md:text-sm text-muted-foreground mt-1">{label}</p>
               </motion.div>
             ))}
           </div>
@@ -149,31 +149,31 @@ export default function About() {
       <Separator className="max-w-5xl mx-auto" />
 
       {/* ── Our Mission ──────────────────────────────────────────────────── */}
-      <section className="w-full py-20">
+      <section className="w-full py-14 md:py-20">
         <div className="container mx-auto px-4 lg:px-8 2xl:px-20">
-          <div className="flex flex-col lg:flex-row items-center gap-14">
+          <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-14">
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="flex-1"
+              className="flex-1 w-full"
             >
               <span className="inline-block bg-[#7C3AED]/10 text-[#7C3AED] text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-wider uppercase">
                 Our Mission
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-5 font-[family-name:var(--font-display)]">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-5 font-[family-name:var(--font-display)]">
                 Redefining the Way{" "}
                 <span className="bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] bg-clip-text text-transparent">
                   People Move
                 </span>
               </h2>
-              <p className="text-muted-foreground leading-relaxed mb-4 text-base">
+              <p className="text-muted-foreground leading-relaxed mb-4 text-sm md:text-base">
                 We believe mobility should be accessible, premium, and stress-free. Our platform
                 empowers car owners to monetize their idle vehicles while giving renters access to
                 an unmatched fleet — at fair, transparent prices.
               </p>
-              <p className="text-muted-foreground leading-relaxed text-base">
+              <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
                 Founded in 2016, DriveEase has grown from a small startup to serving over 50,000
                 customers across 30+ cities. Our technology-first approach ensures every booking,
                 payment, and interaction is seamless and secure.
@@ -185,13 +185,13 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="flex-1 relative"
+              className="flex-1 relative w-full"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-[#7C3AED]/20 to-[#06B6D4]/20 rounded-3xl blur-2xl" />
               <img
                 src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=700&q=80"
                 alt="Premium car fleet"
-                className="relative z-10 w-full rounded-3xl shadow-2xl object-cover max-h-[400px]"
+                className="relative z-10 w-full rounded-3xl shadow-2xl object-cover max-h-[280px] md:max-h-[400px]"
               />
             </motion.div>
           </div>
@@ -199,22 +199,22 @@ export default function About() {
       </section>
 
       {/* ── Values ───────────────────────────────────────────────────────── */}
-      <section className="w-full py-20 bg-gradient-to-b from-[#F5F3FF]/40 to-transparent">
+      <section className="w-full py-14 md:py-20 bg-gradient-to-b from-[#F5F3FF]/40 to-transparent">
         <div className="container mx-auto px-4 lg:px-8 2xl:px-20">
-          <div className="text-center mb-14">
+          <div className="text-center mb-10 md:mb-14">
             <span className="inline-block bg-[#7C3AED]/10 text-[#7C3AED] text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-wider uppercase">
               What We Stand For
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold font-[family-name:var(--font-display)]">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-[family-name:var(--font-display)]">
               Our Core Values
             </h2>
-            <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
+            <p className="text-muted-foreground mt-3 max-w-xl mx-auto text-sm md:text-base px-2">
               Every decision we make is guided by the principles that have made us the most trusted
               car rental platform.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {values.map(({ icon: Icon, title, description, color, bg }, i) => (
               <motion.div
                 key={title}
@@ -225,11 +225,11 @@ export default function About() {
                 viewport={{ once: true }}
               >
                 <Card className="border-border/60 shadow-sm hover:shadow-violet transition-shadow duration-300 h-full">
-                  <CardContent className="p-6 flex flex-col gap-3">
-                    <div className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl ${bg} self-start`}>
+                  <CardContent className="p-5 md:p-6 flex flex-col gap-3">
+                    <div className={`inline-flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-2xl ${bg} self-start`}>
                       <Icon className={`w-5 h-5 ${color}`} />
                     </div>
-                    <h3 className="font-bold text-lg text-foreground">{title}</h3>
+                    <h3 className="font-bold text-base md:text-lg text-foreground">{title}</h3>
                     <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
                   </CardContent>
                 </Card>
@@ -240,18 +240,19 @@ export default function About() {
       </section>
 
       {/* ── Team ─────────────────────────────────────────────────────────── */}
-      <section className="w-full py-20">
+      <section className="w-full py-14 md:py-20">
         <div className="container mx-auto px-4 lg:px-8 2xl:px-20">
-          <div className="text-center mb-14">
+          <div className="text-center mb-10 md:mb-14">
             <span className="inline-block bg-[#7C3AED]/10 text-[#7C3AED] text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-wider uppercase">
               The People Behind DriveEase
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold font-[family-name:var(--font-display)]">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-[family-name:var(--font-display)]">
               Meet Our Team
             </h2>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          {/* 3 cards: on mobile 1-col, on sm 2-col but we centre the last one */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {team.map(({ name, role, image, bio }, i) => (
               <motion.div
                 key={name}
@@ -260,6 +261,8 @@ export default function About() {
                 transition={{ duration: 0.5, delay: i * 0.12 }}
                 whileHover={{ y: -6 }}
                 viewport={{ once: true }}
+                /* Centre the lone third card on sm breakpoint */
+                className={i === 2 ? "sm:col-span-2 sm:max-w-xs sm:mx-auto lg:col-span-1 lg:max-w-none lg:mx-0 w-full" : ""}
               >
                 <Card className="border-border/60 shadow-sm hover:shadow-violet transition-shadow duration-300 text-center overflow-hidden">
                   <CardContent className="p-0">
@@ -267,12 +270,12 @@ export default function About() {
                       <img
                         src={image}
                         alt={name}
-                        className="w-full h-52 object-cover object-top"
+                        className="w-full h-48 md:h-52 object-cover object-top"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                     </div>
-                    <div className="p-5">
-                      <h3 className="font-bold text-lg text-foreground">{name}</h3>
+                    <div className="p-4 md:p-5">
+                      <h3 className="font-bold text-base md:text-lg text-foreground">{name}</h3>
                       <p className="text-[#7C3AED] text-sm font-semibold mb-2">{role}</p>
                       <p className="text-muted-foreground text-xs leading-relaxed">{bio}</p>
                     </div>
@@ -285,7 +288,7 @@ export default function About() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section className="w-full py-20">
+      <section className="w-full py-14 md:py-20">
         <div className="container mx-auto px-4 lg:px-8 2xl:px-20">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -295,15 +298,15 @@ export default function About() {
             className="relative overflow-hidden rounded-3xl"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-[#7C3AED] via-[#6366F1] to-[#06B6D4]" />
-            <div className="relative z-10 text-center text-white py-16 px-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 font-[family-name:var(--font-display)]">
+            <div className="relative z-10 text-center text-white py-12 md:py-16 px-5 md:px-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 font-[family-name:var(--font-display)]">
                 Ready to Hit the Road?
               </h2>
-              <p className="text-white/80 max-w-lg mx-auto mb-8 text-base">
+              <p className="text-white/80 max-w-lg mx-auto mb-8 text-sm md:text-base">
                 Browse our premium fleet and book your perfect ride in seconds.
               </p>
               <Link to="/cars">
-                <Button className="bg-white text-[#7C3AED] hover:bg-white/90 rounded-full px-8 py-3 font-semibold text-base cursor-pointer">
+                <Button className="bg-white text-[#7C3AED] hover:bg-white/90 rounded-full px-6 md:px-8 py-2.5 md:py-3 font-semibold text-sm md:text-base cursor-pointer">
                   Explore Cars →
                 </Button>
               </Link>
