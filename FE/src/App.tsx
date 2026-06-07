@@ -15,6 +15,8 @@ import CarDetails from "./Pages/CarDetails";
 import Cars from "./Pages/Cars";
 import MyBookings from "./Pages/MyBookings";
 import AppGuard from "./Guards/AppGuard";
+import About from "./Pages/About";
+import TestimonialsPage from "./Pages/TestimonialsPage";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,8 @@ const router = createBrowserRouter([
       { path: "/home",              element: <Home /> },
       { path: "/cars",              element: <Cars /> },
       { path: "/carDetails/:carId", element: <CarDetails /> },
+      { path: "/about",             element: <About /> },
+      { path: "/testimonials",      element: <TestimonialsPage /> },
 
       // ─── Auth required ──────────────────────────────────────────
       {

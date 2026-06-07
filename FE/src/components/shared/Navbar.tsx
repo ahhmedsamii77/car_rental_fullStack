@@ -14,10 +14,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 const navLinks = [
-  { name: "Home",        path: "/",           public: true },
-  { name: "Cars",        path: "/cars",       public: true },
-  { name: "My Bookings", path: "/myBookings", public: false },
-  { name: "Dashboard",   path: "/dashboard",  public: false, adminOnly: true },
+  { name: "Home",         path: "/",              public: true },
+  { name: "Cars",         path: "/cars",          public: true },
+  { name: "About",        path: "/about",         public: true },
+  { name: "Testimonials", path: "/testimonials",  public: true },
+  { name: "My Bookings",  path: "/myBookings",    public: false },
+  { name: "Dashboard",    path: "/dashboard",     public: false, adminOnly: true },
 ]
 
 export default function Navbar() {

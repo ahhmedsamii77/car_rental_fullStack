@@ -50,6 +50,22 @@ export default function BookingForm({ car }: { car: CarResType }) {
     }),
   })
 
+  // ── Live price preview (mirrors backend logic exactly) ──────────────────
+  const { pickupDate, returnDate } = formik.values
+  let days = 0
+  let totalPrice = 0
+  let isSameDay = false
+
+  if (pickupDate && returnDate) {
+    const picked   = new Date(pickupDate)
+    const returned = new Date(returnDate)
+    const diffMs   = returned.getTime() - picked.getTime()
+    days       = Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)))
+    totalPrice = car.price_per_day * days
+    isSameDay  = diffMs === 0
+  }
+  // ────────────────────────────────────────────────────────────────────────
+
   return (
     <>
       <Card className="border-border/60 shadow-violet sticky top-24">
@@ -95,6 +111,7 @@ export default function BookingForm({ car }: { car: CarResType }) {
               <Input
                 type="date"
                 id="pickupDate"
+                min={new Date().toISOString().split("T")[0]}
                 value={formik.values.pickupDate}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -113,6 +130,7 @@ export default function BookingForm({ car }: { car: CarResType }) {
               <Input
                 type="date"
                 id="returnDate"
+                min={formik.values.pickupDate || new Date().toISOString().split("T")[0]}
                 value={formik.values.returnDate}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -122,6 +140,28 @@ export default function BookingForm({ car }: { car: CarResType }) {
                 <p className="text-destructive text-xs">{formik.errors.returnDate}</p>
               )}
             </div>
+
+            {/* Live price summary */}
+            {days > 0 && (
+              <div className="rounded-xl bg-[#7C3AED]/5 border border-[#7C3AED]/15 px-4 py-3 space-y-1.5">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    ${car.price_per_day} × {days} {days === 1 ? "day" : "days"}
+                  </span>
+                  <span className="font-semibold text-foreground">${totalPrice}</span>
+                </div>
+                {isSameDay && (
+                  <p className="text-xs text-amber-600">
+                    ⚡ Same-day returns are charged as 1 full day.
+                  </p>
+                )}
+                <Separator className="my-1" />
+                <div className="flex justify-between text-sm font-bold">
+                  <span>Total</span>
+                  <span className="text-[#7C3AED]">${totalPrice}</span>
+                </div>
+              </div>
+            )}
 
             <Button
               type="submit"

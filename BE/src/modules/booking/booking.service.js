@@ -43,8 +43,9 @@ export async function createBooking(req, res, next) {
   }
   const picked = new Date(pickupDate);
   const returned = new Date(returnDate);
-  const days = Math.ceil((returned - picked) / (1000 * 60 * 60 * 24));
-  const price = car.price * days;
+  const diffMs = returned - picked;
+  const days = Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+  const price = car.price_per_day * days;
   const booking = await bookingModel.create({ carId, pickupDate, returnDate, userId: req.user._id, price, owner: car.owner });
   return res.status(201).json({ message: "booking created successfully", booking });
 }
