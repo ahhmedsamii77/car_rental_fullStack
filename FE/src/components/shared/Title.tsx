@@ -12,7 +12,7 @@ export default function Title({ title, description }: { title: string; descripti
         {title}
       </h1>
       {description && (
-        <p className="text-muted-foreground max-w-xl text-center text-base md:text-lg leading-relaxed">
+        <p className="text-muted-foreground max-w-xl text-center mx-auto text-base md:text-lg leading-relaxed">
           {description}
         </p>
       )}
